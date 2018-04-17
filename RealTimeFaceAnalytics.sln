@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.27130.2036
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeFaceAnalytics.Core", "RealTimeFaceAnalytics.Core\RealTimeFaceAnalytics.Core.csproj", "{86F00C5B-4E2B-4345-8775-E6E827646629}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoFrameAnalyzer", "VideoFrameAnalyzer\VideoFrameAnalyzer.csproj", "{1BC6EDA6-4FD9-4710-8E46-6BC978AB72E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RealTimeFaceAnalytics.WPF", "RealTimeFaceAnalytics.WPF\RealTimeFaceAnalytics.WPF.csproj", "{EB040AD0-DC91-4BAE-AD4D-AC2924D8D9F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{86F00C5B-4E2B-4345-8775-E6E827646629}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{86F00C5B-4E2B-4345-8775-E6E827646629}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{86F00C5B-4E2B-4345-8775-E6E827646629}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1BC6EDA6-4FD9-4710-8E46-6BC978AB72E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1BC6EDA6-4FD9-4710-8E46-6BC978AB72E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1BC6EDA6-4FD9-4710-8E46-6BC978AB72E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1BC6EDA6-4FD9-4710-8E46-6BC978AB72E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB040AD0-DC91-4BAE-AD4D-AC2924D8D9F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB040AD0-DC91-4BAE-AD4D-AC2924D8D9F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB040AD0-DC91-4BAE-AD4D-AC2924D8D9F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB040AD0-DC91-4BAE-AD4D-AC2924D8D9F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
