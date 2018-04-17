@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="RealTimeFaceAnalytics.Core.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="FaceAPIKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="EmotionAPIKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">!!!NOT USED!!!</Value>
+    </Setting>
+    <Setting Name="VisionAPIKey" Type="System.String" Scope="User">
+      <Value Profile="(Default)">!!!NOT USED!!!</Value>
+    </Setting>
+    <Setting Name="FaceAPIHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://westeurope.api.cognitive.microsoft.com/face/v1.0</Value>
+    </Setting>
+    <Setting Name="EmotionAPIHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://westus.api.cognitive.microsoft.com/emotion/v1.0</Value>
+    </Setting>
+    <Setting Name="VisionAPIHost" Type="System.String" Scope="User">
+      <Value Profile="(Default)">https://westeurope.api.cognitive.microsoft.com/vision/v1.0</Value>
+    </Setting>
+    <Setting Name="AnalysisInterval" Type="System.TimeSpan" Scope="User">
+      <Value Profile="(Default)">00:00:03</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
