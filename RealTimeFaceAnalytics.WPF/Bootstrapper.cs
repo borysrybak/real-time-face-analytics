@@ -4,8 +4,6 @@ using RealTimeFaceAnalytics.Core.Services;
 using RealTimeFaceAnalytics.Core.ViewModels;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Windows;
 
 namespace RealTimeFaceAnalytics.WPF
