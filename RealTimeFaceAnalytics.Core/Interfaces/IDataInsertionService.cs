@@ -19,7 +19,7 @@ namespace RealTimeFaceAnalytics.Core.Interfaces
         void AddHair(Hair hair);
         void AddFacialHair(FacialHair facialHair);
         void AddAdditionalFeatures(FaceAttributes additionalFeatures);
-        void AddFaceApiCallCount(int faceAPICallCount);
+        void AddFaceApiCallCount(int faceApiCallCount);
         void AddSessionDuration(TimeSpan sessionDuration);
     }
 }

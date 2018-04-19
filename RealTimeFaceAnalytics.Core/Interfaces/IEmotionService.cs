@@ -12,7 +12,7 @@ namespace RealTimeFaceAnalytics.Core.Interfaces
         Emotion[] RecognizeEmotions(string imagePath);
         Emotion[] RecognizeEmotionsWithLocalFaceDetections(MemoryStream memoryStream, Rectangle[] faceRectangles);
         Emotion[] RecognizeEmotionsWithLocalFaceDetections(string imagePath, Rectangle[] faceRectangles);
-        int GetEmotionServiceClientAPICallCount();
+        int GetEmotionServiceClientApiCallCount();
         string SummarizeEmotionScores(EmotionScores emotionScores);
         void AddEmotionScoresToStatistics(EmotionScores emotionScores);
         EmotionScores CalculateEmotionScoresStatistics();

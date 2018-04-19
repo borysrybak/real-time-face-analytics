@@ -12,21 +12,24 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using VideoFrameAnalyzer;
+using Color = System.Windows.Media.Color;
+using Face = Microsoft.ProjectOxford.Face.Contract.Face;
+using Rectangle = System.Windows.Shapes.Rectangle;
 
 namespace RealTimeFaceAnalytics.Core.Services
 {
     public class VisualizationService : IVisualizationService
     {
-        private readonly SolidColorBrush s_lineBrush = new SolidColorBrush(new System.Windows.Media.Color { R = 255, G = 0, B = 0, A = 255 });
-        private readonly Typeface s_typeface = new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
+        private readonly SolidColorBrush _sLineBrush = new SolidColorBrush(new Color { R = 255, G = 0, B = 0, A = 255 });
+        private readonly Typeface _sTypeface = new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal, FontWeights.Bold, FontStretches.Normal);
 
-        private readonly IOpenCVService _openCVService;
+        private readonly IOpenCvService _openCvService;
         private readonly IFaceService _faceService;
         private readonly IEmotionService _emotionService;
 
-        public VisualizationService(IOpenCVService openCVService, IFaceService faceService, IEmotionService emotionService)
+        public VisualizationService(IOpenCvService openCvService, IFaceService faceService, IEmotionService emotionService)
         {
-            _openCVService = openCVService;
+            _openCvService = openCvService;
             _faceService = faceService;
             _emotionService = emotionService;
         }
@@ -36,7 +39,7 @@ namespace RealTimeFaceAnalytics.Core.Services
             return DrawTagsContext(baseImage, tags);
         }
 
-        public BitmapSource DrawFaces(BitmapSource baseImage, Microsoft.ProjectOxford.Face.Contract.Face[] faces, EmotionScores[] emotionScores, string[] celebName)
+        public BitmapSource DrawFaces(BitmapSource baseImage, Face[] faces, EmotionScores[] emotionScores, string[] celebName)
         {
             return DrawFacesContext(baseImage, faces, emotionScores, celebName);
         }
@@ -46,20 +49,18 @@ namespace RealTimeFaceAnalytics.Core.Services
             return VisualizeResult(videoFrame, currentLiveCameraResult);
         }
 
-        public System.Windows.Shapes.Rectangle ComposeRectangleBar(EmotionScores emotionScores)
+        public Rectangle ComposeRectangleBar(EmotionScores emotionScores)
         {
             return ComposeRectangleBarFromEmotions(emotionScores);
         }
 
-        public List<System.Windows.Shapes.Rectangle> MixHairColor(HairColor[] hairColor)
+        public List<Rectangle> MixHairColor(HairColor[] hairColor)
         {
             return MixHairColorAsRectangles(hairColor);
         }
 
-        private BitmapSource DrawOverlay(BitmapSource baseImage, Action<DrawingContext, double> drawAction)
+        private static BitmapSource DrawOverlay(BitmapSource baseImage, Action<DrawingContext, double> drawAction)
         {
-            RenderTargetBitmap result;
-
             var annotationScale = baseImage.PixelHeight / 320;
             var visual = new DrawingVisual();
             var drawingContext = visual.RenderOpen();
@@ -72,7 +73,7 @@ namespace RealTimeFaceAnalytics.Core.Services
                 baseImage.PixelWidth, baseImage.PixelHeight,
                 baseImage.DpiX, baseImage.DpiY, PixelFormats.Pbgra32);
             outputBitmap.Render(visual);
-            result = outputBitmap;
+            var result = outputBitmap;
 
             return result;
         }
@@ -83,40 +84,39 @@ namespace RealTimeFaceAnalytics.Core.Services
                 return baseImage;
             }
 
-            Action<DrawingContext, double> drawAction = (drawingContext, annotationScale) =>
+            void DrawAction(DrawingContext drawingContext, double annotationScale)
             {
                 double y = 0;
                 foreach (var tag in tags)
                 {
-                    var ft = new FormattedText(tag.Name,
-                        CultureInfo.CurrentCulture, FlowDirection.LeftToRight, s_typeface,
-                        42 * annotationScale, Brushes.Black);
+                    var ft = new FormattedText(tag.Name, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, _sTypeface, 42 * annotationScale, Brushes.Black);
                     var geom = ft.BuildGeometry(new System.Windows.Point(10 * annotationScale, y));
-                    drawingContext.DrawGeometry(s_lineBrush, new Pen(Brushes.Black, 2 * annotationScale), geom);
+                    drawingContext.DrawGeometry(_sLineBrush, new Pen(Brushes.Black, 2 * annotationScale), geom);
                     y += 42 * annotationScale;
                 }
-            };
+            }
 
-            return DrawOverlay(baseImage, drawAction);
+            return DrawOverlay(baseImage, DrawAction);
         }
-        private BitmapSource DrawFacesContext(BitmapSource baseImage, Microsoft.ProjectOxford.Face.Contract.Face[] faces, EmotionScores[] emotionScores, string[] celebName)
+        private BitmapSource DrawFacesContext(BitmapSource baseImage, IReadOnlyList<Face> faces, IReadOnlyList<EmotionScores> emotionScores, IReadOnlyList<string> celebName)
         {
             if (faces == null)
             {
                 return baseImage;
             }
 
-            Action<DrawingContext, double> drawAction = (drawingContext, annotationScale) =>
+            void DrawAction(DrawingContext drawingContext, double annotationScale)
             {
-                for (int i = 0; i < faces.Length; i++)
+                for (var i = 0; i < faces.Count; i++)
                 {
                     var face = faces[i];
-                    if (face.FaceRectangle == null) { continue; }
+                    if (face.FaceRectangle == null)
+                    {
+                        continue;
+                    }
 
-                    var faceRect = new Rect(
-                        face.FaceRectangle.Left, face.FaceRectangle.Top,
-                        face.FaceRectangle.Width, face.FaceRectangle.Height);
-                    string text = "";
+                    var faceRect = new Rect(face.FaceRectangle.Left, face.FaceRectangle.Top, face.FaceRectangle.Width, face.FaceRectangle.Height);
+                    var text = "";
 
                     if (face.FaceAttributes != null)
                     {
@@ -137,96 +137,74 @@ namespace RealTimeFaceAnalytics.Core.Services
 
                     var lineThickness = 4 * annotationScale;
 
-                    drawingContext.DrawRectangle(
-                        Brushes.Transparent,
-                        new Pen(s_lineBrush, lineThickness),
-                        faceRect);
+                    drawingContext.DrawRectangle(Brushes.Transparent, new Pen(_sLineBrush, lineThickness), faceRect);
 
-                    if (text != "")
-                    {
-                        var ft = new FormattedText(text,
-                            CultureInfo.CurrentCulture, FlowDirection.LeftToRight, s_typeface,
-                            16 * annotationScale, Brushes.Black);
+                    if (text == "") continue;
+                    var ft = new FormattedText(text, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, _sTypeface, 16 * annotationScale, Brushes.Black);
 
-                        var pad = 3 * annotationScale;
+                    var pad = 3 * annotationScale;
 
-                        var ypad = pad;
-                        var xpad = pad + 4 * annotationScale;
-                        var origin = new System.Windows.Point(
-                            faceRect.Left + xpad - lineThickness / 2,
-                            faceRect.Top - ft.Height - ypad + lineThickness / 2);
-                        var rect = ft.BuildHighlightGeometry(origin).GetRenderBounds(null);
-                        rect.Inflate(xpad, ypad);
+                    var ypad = pad;
+                    var xpad = pad + 4 * annotationScale;
+                    var origin = new System.Windows.Point(faceRect.Left + xpad - lineThickness / 2, faceRect.Top - ft.Height - ypad + lineThickness / 2);
+                    var rect = ft.BuildHighlightGeometry(origin).GetRenderBounds(null);
+                    rect.Inflate(xpad, ypad);
 
-                        drawingContext.DrawRectangle(s_lineBrush, null, rect);
-                        drawingContext.DrawText(ft, origin);
-                    }
+                    drawingContext.DrawRectangle(_sLineBrush, null, rect);
+                    drawingContext.DrawText(ft, origin);
                 }
-            };
+            }
 
-            return DrawOverlay(baseImage, drawAction);
+            return DrawOverlay(baseImage, DrawAction);
         }
-        private BitmapSource DrawRectangleContext(BitmapSource baseImage, Microsoft.ProjectOxford.Face.Contract.Face[] faces)
+        private BitmapSource DrawRectangleContext(BitmapSource baseImage, IReadOnlyList<Face> faces)
         {
             if (faces == null)
             {
                 return baseImage;
             }
 
-            Action<DrawingContext, double> drawAction = (drawingContext, annotationScale) =>
+            void DrawAction(DrawingContext drawingContext, double annotationScale)
             {
-                for (int i = 0; i < faces.Length; i++)
+                foreach (var face in faces)
                 {
-                    var face = faces[i];
-                    if (face.FaceRectangle == null) { continue; }
+                    if (face.FaceRectangle == null)
+                    {
+                        continue;
+                    }
 
-                    var faceRect = new Rect(
-                        face.FaceRectangle.Left, face.FaceRectangle.Top,
-                        face.FaceRectangle.Width, face.FaceRectangle.Height);
+                    var faceRect = new Rect(face.FaceRectangle.Left, face.FaceRectangle.Top, face.FaceRectangle.Width, face.FaceRectangle.Height);
 
                     faceRect.Inflate(6 * annotationScale, 6 * annotationScale);
 
                     var lineThickness = 4 * annotationScale;
 
-                    drawingContext.DrawRectangle(
-                        Brushes.Transparent,
-                        new Pen(s_lineBrush, lineThickness),
-                        faceRect);
+                    drawingContext.DrawRectangle(Brushes.Transparent, new Pen(_sLineBrush, lineThickness), faceRect);
                 }
-            };
+            }
 
-            return DrawOverlay(baseImage, drawAction);
+            return DrawOverlay(baseImage, DrawAction);
         }
         private BitmapSource VisualizeResult(VideoFrame videoFrame, LiveCameraResult currentLiveCameraResult)
         {
             var result = videoFrame.Image.ToBitmapSource();
-            if (currentLiveCameraResult != null)
-            {
-                var clientFaces = (OpenCvSharp.Rect[])videoFrame.UserData;
-                if (clientFaces != null && currentLiveCameraResult.Faces != null)
-                {
-                    var faces = currentLiveCameraResult.Faces;
-                    _openCVService.MatchAndReplaceFaces(faces, clientFaces);
-                    result = DrawRectangleContext(result, faces);
-                }
-            }
+            if (currentLiveCameraResult == null) return result;
+            var clientFaces = (OpenCvSharp.Rect[])videoFrame.UserData;
+            if (clientFaces == null || currentLiveCameraResult.Faces == null) return result;
+            var faces = currentLiveCameraResult.Faces;
+            _openCvService.MatchAndReplaceFaces(faces, clientFaces);
+            result = DrawRectangleContext(result, faces);
 
             return result;
         }
-        private System.Windows.Shapes.Rectangle ComposeRectangleBarFromEmotions(EmotionScores emotionScores)
+        private Rectangle ComposeRectangleBarFromEmotions(EmotionScores emotionScores)
         {
-            var result = new System.Windows.Shapes.Rectangle();
-
             var emotionRankedList = emotionScores.ToRankedList();
             var gradientStopsCollection = new GradientStopCollection();
-            var occuringEmotions = new List<KeyValuePair<string, float>>();
-            foreach (var emotion in emotionRankedList.Reverse())
-            {
-                if (emotion.Value > 0.0) { occuringEmotions.Add(emotion); }
-            }
+            var occuringEmotions = emotionRankedList.Reverse().Where(emotion => emotion.Value > 0.0).ToList();
             var occuringEmotionsCount = occuringEmotions.Count;
             var previousValue = 0.0f;
-            for (int i = 0; i < occuringEmotionsCount; i++)
+            for (var i = 0; i < occuringEmotionsCount; i++)
             {
                 var emotion = occuringEmotions[i];
                 var emotionColor = GetEmotionColor(emotion.Key);
@@ -248,17 +226,19 @@ namespace RealTimeFaceAnalytics.Core.Services
                 }
             }
             var linearGradientBrush = new LinearGradientBrush(gradientStopsCollection, new System.Windows.Point(0.0, 0.0), new System.Windows.Point(0.0, 1.0));
-            var composedBar = new System.Windows.Shapes.Rectangle();
-            composedBar.Fill = linearGradientBrush;
-            composedBar.Width = 5.0;
-            composedBar.Margin = new Thickness(1.0, 0, 1.0, 0);
-            result = composedBar;
+            var composedBar = new Rectangle
+            {
+                Fill = linearGradientBrush,
+                Width = 5.0,
+                Margin = new Thickness(1.0, 0, 1.0, 0)
+            };
+            var result = composedBar;
 
             return result;
         }
-        private System.Windows.Media.Color GetEmotionColor(string emotionName)
+        private static Color GetEmotionColor(string emotionName)
         {
-            var result = new System.Windows.Media.Color();
+            Color result;
 
             switch (emotionName)
             {
@@ -293,16 +273,15 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
-        private List<System.Windows.Shapes.Rectangle> MixHairColorAsRectangles(HairColor[] hairColors)
+        private static List<Rectangle> MixHairColorAsRectangles(IEnumerable<HairColor> hairColors)
         {
-            var result = new List<System.Windows.Shapes.Rectangle>();
+            var result = new List<Rectangle>();
 
             var descendingConfidenceHairColors = hairColors.OrderByDescending(i => i.Confidence);
             var firstRectangle = true;
             foreach (var hairColor in descendingConfidenceHairColors)
             {
-                var rectangle = new System.Windows.Shapes.Rectangle();
-                rectangle.Height = 25.0;
+                var rectangle = new Rectangle {Height = 25.0};
                 if (!firstRectangle) { rectangle.Margin = new Thickness(0.0, -25.0, 0.0, 0.0); }
                 rectangle.Opacity = hairColor.Confidence;
                 var mixedHairColor = GetHairColor(hairColor.Color);
@@ -313,9 +292,9 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
-        private System.Windows.Media.Color GetHairColor(HairColorType hairColorType)
+        private static Color GetHairColor(HairColorType hairColorType)
         {
-            var result = new System.Windows.Media.Color();
+            Color result = new Color();
 
             switch (hairColorType)
             {
@@ -336,6 +315,10 @@ namespace RealTimeFaceAnalytics.Core.Services
                     break;
                 case HairColorType.White:
                     result = Colors.White;
+                    break;
+                case HairColorType.Unknown:
+                    break;
+                case HairColorType.Other:
                     break;
                 default:
                     result = Colors.Transparent;

@@ -16,7 +16,7 @@ namespace RealTimeFaceAnalytics.Core.Services
     {
         private readonly IEventAggregator _eventAggregator;
         private readonly IVisualizationService _visualizationService;
-        private readonly IOpenCVService _openCVService;
+        private readonly IOpenCvService _openCvService;
         private readonly IFaceService _faceService;
         private readonly IDataInsertionService _dataInsertionService;
         private readonly FrameGrabber<LiveCameraResult> _frameGrabber;
@@ -25,15 +25,15 @@ namespace RealTimeFaceAnalytics.Core.Services
         private LiveCameraResult _currentLiveCameraResult;
 
         public VideoFrameAnalyzerService(IEventAggregator eventAggregator, IVisualizationService visualizationService,
-            IOpenCVService openCVService, IFaceService faceService, IDataInsertionService dataInsertionService)
+            IOpenCvService openCvService, IFaceService faceService, IDataInsertionService dataInsertionService)
         {
             _frameGrabber = new FrameGrabber<LiveCameraResult>();
             _eventAggregator = eventAggregator;
             _visualizationService = visualizationService;
-            _openCVService = openCVService;
+            _openCvService = openCvService;
             _faceService = faceService;
             _dataInsertionService = dataInsertionService;
-            _localFaceDetector = _openCVService.DefaultFrontalFaceDetector();
+            _localFaceDetector = _openCvService.DefaultFrontalFaceDetector();
         }
 
         public List<string> GetAvailableCameraList()
@@ -44,8 +44,8 @@ namespace RealTimeFaceAnalytics.Core.Services
         public void InitializeFrameGrabber()
         {
             SetUpListenerNewFrame();
-            SetUpListenerNewResultFromAPICall();
-            _openCVService.DefaultFrontalFaceDetector();
+            SetUpListenerNewResultFromApiCall();
+            _openCvService.DefaultFrontalFaceDetector();
             _frameGrabber.AnalysisFunction = _faceService.FacesAnalysisFunction;
         }
 
@@ -61,27 +61,21 @@ namespace RealTimeFaceAnalytics.Core.Services
 
         private List<string> LoadCameraList()
         {
-            var result = new List<string>();
             var numberOfCameras = _frameGrabber.GetNumCameras();
             if (numberOfCameras == 0)
             {
                 //TODO: Listen from ShellViewModel for message about "No cameras found!"
             }
-            var cameras = Enumerable.Range(0, numberOfCameras).Select(i => string.Format("Camera {0}", i + 1));
-            foreach (var camera in cameras)
-            {
-                result.Add(camera);
-            }
+            var cameras = Enumerable.Range(0, numberOfCameras).Select(i => $"Camera {i + 1}");
 
-            return result;
+            return cameras.ToList();
         }
         private int GetSelectedCameraIndex(string selectedCamera)
         {
-            var result = 0;
-
             var cameraList = LoadCameraList();
             var selectedCameraIndex = cameraList.FindIndex(a => a == selectedCamera);
 
+            var result = selectedCameraIndex;
             return result;
         }
         private void SetUpListenerNewFrame()
@@ -100,7 +94,7 @@ namespace RealTimeFaceAnalytics.Core.Services
                 }));
             };
         }
-        private void SetUpListenerNewResultFromAPICall()
+        private void SetUpListenerNewResultFromApiCall()
         {
             _frameGrabber.NewResultAvailable += (s, e) =>
             {
@@ -108,11 +102,11 @@ namespace RealTimeFaceAnalytics.Core.Services
                 {
                     if (e.TimedOut)
                     {
-                        //MessageArea.Text = "API call timed out.";
+                        //TODO: MessageArea.Text = "API call timed out.";
                     }
                     else if (e.Exception != null)
                     {
-                        //MessageArea.Text = "API Exception Message.";
+                        //TODO: MessageArea.Text = "API Exception Message.";
                     }
                     else
                     {
@@ -134,8 +128,8 @@ namespace RealTimeFaceAnalytics.Core.Services
             var analysisInterval = Properties.Settings.Default.AnalysisInterval;
             _dataInsertionService.InitializeSession(analysisInterval);
             _frameGrabber.TriggerAnalysisOnInterval(analysisInterval);
-            int selectedCameraIndex = GetSelectedCameraIndex(selectedCamera);
-            await _frameGrabber.StartProcessingCameraAsync();
+            var selectedCameraIndex = GetSelectedCameraIndex(selectedCamera);
+            await _frameGrabber.StartProcessingCameraAsync(selectedCameraIndex);
         }
         private async Task StopProcessingCamera()
         {

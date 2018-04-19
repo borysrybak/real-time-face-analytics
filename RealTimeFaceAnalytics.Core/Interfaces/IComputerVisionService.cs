@@ -9,6 +9,6 @@ namespace RealTimeFaceAnalytics.Core.Interfaces
         VisionServiceClient GetVisionServiceClient();
         Tag[] GetTags(MemoryStream imageStream);
         Tag[] GetTags(string imagePath);
-        int GetVisionServiceClientAPICallCount();
+        int GetVisionServiceClientApiCallCount();
     }
 }

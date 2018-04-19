@@ -16,7 +16,7 @@ namespace RealTimeFaceAnalytics.Core.Interfaces
         Face[] DetectFaces(string imagePath, IEnumerable<FaceAttributeType> faceAttriubuteTypes = null);
         Face[] DetectFacesWithDefaultAttributes(MemoryStream imageStream);
         Face[] DetectFacesWithDefaultAttributes(string imagePath);
-        int GetFaceServiceClientAPICallCount();
+        int GetFaceServiceClientApiCallCount();
         void ResetFaceServiceLocalData();
         Task<LiveCameraResult> FacesAnalysisFunction(VideoFrame frame);
         string SummarizeFaceAttributes(FaceAttributes faceAttributes);

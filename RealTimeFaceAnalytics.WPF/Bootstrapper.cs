@@ -34,7 +34,7 @@ namespace RealTimeFaceAnalytics.WPF
             _container.Singleton<IComputerVisionService, ComputerVisionService>();
             _container.Singleton<IEmotionService, EmotionService>();
             _container.Singleton<IFaceService, FaceService>();
-            _container.Singleton<IOpenCVService, OpenCVService>();
+            _container.Singleton<IOpenCvService, OpenCvService>();
             _container.Singleton<IVideoFrameAnalyzerService, VideoFrameAnalyzerService>();
             _container.Singleton<IVisualizationService, VisualizationService>();
             _container.Singleton<IDataInsertionService, DataInsertionService>();

@@ -3,7 +3,7 @@ using OpenCvSharp;
 
 namespace RealTimeFaceAnalytics.Core.Interfaces
 {
-    public interface IOpenCVService
+    public interface IOpenCvService
     {
         CascadeClassifier DefaultFrontalFaceDetector();
         void MatchAndReplaceFaces(Face[] faces, Rect[] clientRects);

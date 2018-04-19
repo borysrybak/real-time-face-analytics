@@ -5,6 +5,7 @@ using RealTimeFaceAnalytics.Core.Models;
 using RealTimeFaceAnalytics.Core.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,7 +17,7 @@ namespace RealTimeFaceAnalytics.Core.Services
     {
         private readonly List<FaceAttributeType> _faceAttributes;
         private FaceServiceClient _faceServiceClient;
-        private int _faceAPICallCount = 0;
+        private int _faceApiCallCount;
         private List<double> _ageArray = new List<double>();
         private List<string> _genderArray = new List<string>();
 
@@ -34,7 +35,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
         public void InitializeFaceServiceClient()
         {
-            InitializeFaceAPIClient();
+            InitializeFaceApiClient();
         }
 
         public Face[] DetectFaces(MemoryStream imageStream, IEnumerable<FaceAttributeType> faceAttributeTypes = null)
@@ -57,9 +58,9 @@ namespace RealTimeFaceAnalytics.Core.Services
             return DetectFacesFromImage(imagePath, _faceAttributes).Result;
         }
 
-        public int GetFaceServiceClientAPICallCount()
+        public int GetFaceServiceClientApiCallCount()
         {
-            return _faceAPICallCount;
+            return _faceApiCallCount;
         }
 
         public void ResetFaceServiceLocalData()
@@ -97,7 +98,7 @@ namespace RealTimeFaceAnalytics.Core.Services
             return GetGenderStatistics();
         }
 
-        private void InitializeFaceAPIClient()
+        private void InitializeFaceApiClient()
         {
             var faceServiceClientSubscriptionKey = Properties.Settings.Default.FaceAPIKey.Trim();
             var faceServiceClientApiRoot = Properties.Settings.Default.FaceAPIHost;
@@ -107,7 +108,7 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             var result = new LiveCameraResult();
 
-            var frameImage = frame.Image.ToMemoryStream(".jpg", ImageEncodingParameter.JpegParams); ;
+            var frameImage = frame.Image.ToMemoryStream(".jpg", ImageEncodingParameter.JpegParams);
             var faces = await DetectFacesFromImage(frameImage, _faceAttributes);
             result.Faces = faces;
 
@@ -117,7 +118,7 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             var result = await _faceServiceClient.DetectAsync(image, true, false, faceAttributeTypes);
 
-            _faceAPICallCount++;
+            _faceApiCallCount++;
 
             return result;
         }
@@ -142,19 +143,17 @@ namespace RealTimeFaceAnalytics.Core.Services
             _faceAttributes.Add(FaceAttributeType.Occlusion);
             _faceAttributes.Add(FaceAttributeType.Smile);
         }
-        private string SummarizeDefaultFaceAttributes(FaceAttributes faceAttributes)
+        private static string SummarizeDefaultFaceAttributes(FaceAttributes faceAttributes)
         {
-            var result = string.Empty;
-
             var attributes = new List<string>();
             if (faceAttributes.Gender != null) attributes.Add(faceAttributes.Gender);
-            if (faceAttributes.Age > 0) attributes.Add(faceAttributes.Age.ToString());
+            if (faceAttributes.Age > 0) attributes.Add(faceAttributes.Age.ToString(CultureInfo.InvariantCulture));
             if (faceAttributes.HeadPose != null)
             {
-                bool facing = Math.Abs(faceAttributes.HeadPose.Yaw) < 25;
+                var facing = Math.Abs(faceAttributes.HeadPose.Yaw) < 25;
                 attributes.Add(facing ? "facing camera" : "not facing camera");
             }
-            result = string.Join(", ", attributes);
+            var result = string.Join(", ", attributes);
 
             return result;
         }
@@ -168,25 +167,21 @@ namespace RealTimeFaceAnalytics.Core.Services
         }
         private double GetAgeStatistics()
         {
-            var result = 0.0;
-
-            result = _ageArray.Average();
+            var result = _ageArray.Average();
 
             return result;
         }
         private string GetGenderStatistics()
         {
-            var result = string.Empty;
-
-            result = _genderArray.GroupBy(s => s)
-                         .OrderByDescending(s => s.Count())
-                         .First().Key;
+            var result = _genderArray.GroupBy(s => s)
+                .OrderByDescending(s => s.Count())
+                .First().Key;
 
             return result;
         }
         private void ResetLocalVariables()
         {
-            _faceAPICallCount = 0;
+            _faceApiCallCount = 0;
             _ageArray = new List<double>();
             _genderArray = new List<string>();
         }

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Text;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -86,7 +87,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _canStartAnalyze = false;
+        private bool _canStartAnalyze;
         public bool CanStartAnalyze
         {
             get { return _canStartAnalyze; }
@@ -97,7 +98,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _canStopAnalyze = false;
+        private bool _canStopAnalyze;
         public bool CanStopAnalyze
         {
             get { return _canStopAnalyze; }
@@ -394,14 +395,14 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private int _faceAPICallCount;
-        public int FaceAPICallCount
+        private int _faceApiCallCount;
+        public int FaceApiCallCount
         {
-            get { return _faceAPICallCount; }
+            get { return _faceApiCallCount; }
             set
             {
-                _faceAPICallCount = value;
-                NotifyOfPropertyChange(() => FaceAPICallCount);
+                _faceApiCallCount = value;
+                NotifyOfPropertyChange(() => FaceApiCallCount);
             }
         }
 
@@ -737,7 +738,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             var hairColors = faceAttributes.Hair.HairColor;
             GenerateHairColor(hairColors);
 
-            var faceApiCallCount = _faceService.GetFaceServiceClientAPICallCount();
+            var faceApiCallCount = _faceService.GetFaceServiceClientApiCallCount();
             AssignFaceApiCallCount(faceApiCallCount);
             _dataInsertionService.AddFaceApiCallCount(faceApiCallCount);
 
@@ -850,7 +851,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
                 foreach (var accessory in accessories)
                 {
                     var accessoryType = accessory.Type.ToString();
-                    var accessoryConfidence = accessory.Confidence.ToString();
+                    var accessoryConfidence = accessory.Confidence.ToString(CultureInfo.InvariantCulture);
                     accessoryList.Append(accessoryType + ": " + accessoryConfidence + ", ");
                 }
                 Accessories = accessoryList.ToString();
@@ -898,7 +899,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
         }
         private void AssignFaceApiCallCount(int faceApiCallCount)
         {
-            FaceAPICallCount = faceApiCallCount; ;
+            FaceApiCallCount = faceApiCallCount;
         }
     }
 }

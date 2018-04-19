@@ -4,8 +4,8 @@ using RealTimeFaceAnalytics.Core.Interfaces;
 using RealTimeFaceAnalytics.Core.Models;
 using RealTimeFaceAnalytics.Core.Utils;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using VideoFrameAnalyzer;
 
@@ -17,7 +17,7 @@ namespace RealTimeFaceAnalytics.Core.Services
         private readonly string _visionServiceClientApiRoot = Properties.Settings.Default.VisionAPIHost;
         private readonly VisionServiceClient _visionServiceClient;
 
-        private int _visionAPICallCount = 0;
+        private int _visionApiCallCount;
 
         public ComputerVisionService()
         {
@@ -39,9 +39,9 @@ namespace RealTimeFaceAnalytics.Core.Services
             return AnalyzeImageBySpecificVisualFeatures(imagePath, VisualFeature.Tags).Result;
         }
 
-        public int GetVisionServiceClientAPICallCount()
+        public int GetVisionServiceClientApiCallCount()
         {
-            return _visionAPICallCount;
+            return _visionApiCallCount;
         }
 
         public async Task<LiveCameraResult> VisionAnalysisFunction(VideoFrame frame)
@@ -53,7 +53,7 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             var result = new LiveCameraResult();
 
-            var frameImage = frame.Image.ToMemoryStream(".jpg", ImageEncodingParameter.JpegParams); ;
+            var frameImage = frame.Image.ToMemoryStream(".jpg", ImageEncodingParameter.JpegParams);
             var tags = await AnalyzeImageBySpecificVisualFeatures(frameImage, VisualFeature.Tags);
             result.Tags = tags;
 
@@ -61,21 +61,12 @@ namespace RealTimeFaceAnalytics.Core.Services
         }
         private async Task<Tag[]> AnalyzeImageBySpecificVisualFeatures(dynamic image, params VisualFeature[] visualFeatures)
         {
-            var result = new Tag[0];
-            var analysisResult = new AnalysisResult();
-            var visualFeaturesLength = visualFeatures.Length;
-            var featuresList = new List<string>();
-            foreach (var feature in visualFeatures)
-            {
-                var featureAsString = Enum.GetName(typeof(VisualFeature), feature);
-                featuresList.Add(featureAsString);
-            }
-            var features = featuresList.ToArray();
+            var features = visualFeatures.Select(feature => Enum.GetName(typeof(VisualFeature), feature)).ToArray();
 
-            analysisResult = await _visionServiceClient.AnalyzeImageAsync(image, features);
-            result = analysisResult.Tags;
+            AnalysisResult analysisResult = await _visionServiceClient.AnalyzeImageAsync(image, features);
+            var result = analysisResult.Tags;
 
-            _visionAPICallCount++;
+            _visionApiCallCount++;
 
             return result;
         }

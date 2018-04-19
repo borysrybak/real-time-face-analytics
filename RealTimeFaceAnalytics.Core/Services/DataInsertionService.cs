@@ -4,8 +4,6 @@ using RealTimeFaceAnalytics.Core.Interfaces;
 using RealTimeFaceAnalytics.Core.Models;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
 
 namespace RealTimeFaceAnalytics.Core.Services
 {
@@ -81,9 +79,9 @@ namespace RealTimeFaceAnalytics.Core.Services
             AddAdditionalFeaturesToCustomer(additionalFeatures);
         }
 
-        public void AddFaceApiCallCount(int faceAPICallCount)
+        public void AddFaceApiCallCount(int faceApiCallCount)
         {
-            AddFaceApiCallCountToSessionServicesDetails(faceAPICallCount);
+            AddFaceApiCallCountToSessionServicesDetails(faceApiCallCount);
         }
 
         public void AddSessionDuration(TimeSpan sessionDuration)
@@ -123,33 +121,39 @@ namespace RealTimeFaceAnalytics.Core.Services
         }
         private void AddEmotionsToSessionInterval(EmotionScores emotionScores)
         {
-            _sessionInterval.Emotions = new Emotions();
-            _sessionInterval.Emotions.Anger = emotionScores.Anger;
-            _sessionInterval.Emotions.Happiness = emotionScores.Happiness;
-            _sessionInterval.Emotions.Contempt = emotionScores.Contempt;
-            _sessionInterval.Emotions.Neutral = emotionScores.Neutral;
-            _sessionInterval.Emotions.Disgust = emotionScores.Disgust;
-            _sessionInterval.Emotions.Sadness = emotionScores.Sadness;
-            _sessionInterval.Emotions.Fear = emotionScores.Fear;
-            _sessionInterval.Emotions.Surprise = emotionScores.Surprise;
+            _sessionInterval.Emotions = new Emotions
+            {
+                Anger = emotionScores.Anger,
+                Happiness = emotionScores.Happiness,
+                Contempt = emotionScores.Contempt,
+                Neutral = emotionScores.Neutral,
+                Disgust = emotionScores.Disgust,
+                Sadness = emotionScores.Sadness,
+                Fear = emotionScores.Fear,
+                Surprise = emotionScores.Surprise
+            };
         }
         private void AddAverageEmotionsToCustomer(EmotionScores averageEmotions)
         {
-            _customer.AverageEmotions = new Emotions();
-            _customer.AverageEmotions.Anger = averageEmotions.Anger;
-            _customer.AverageEmotions.Happiness = averageEmotions.Happiness;
-            _customer.AverageEmotions.Contempt = averageEmotions.Contempt;
-            _customer.AverageEmotions.Neutral = averageEmotions.Neutral;
-            _customer.AverageEmotions.Disgust = averageEmotions.Disgust;
-            _customer.AverageEmotions.Sadness = averageEmotions.Sadness;
-            _customer.AverageEmotions.Fear = averageEmotions.Fear;
-            _customer.AverageEmotions.Surprise = averageEmotions.Surprise;
+            _customer.AverageEmotions = new Emotions
+            {
+                Anger = averageEmotions.Anger,
+                Happiness = averageEmotions.Happiness,
+                Contempt = averageEmotions.Contempt,
+                Neutral = averageEmotions.Neutral,
+                Disgust = averageEmotions.Disgust,
+                Sadness = averageEmotions.Sadness,
+                Fear = averageEmotions.Fear,
+                Surprise = averageEmotions.Surprise
+            };
         }
         private void AddHairToCustomer(Microsoft.ProjectOxford.Face.Contract.Hair hair)
         {
-            _customer.Hair = new Models.Hair();
-            _customer.Hair.Bald = hair.Bald;
-            _customer.Hair.IsInvisible = hair.Invisible;
+            _customer.Hair = new Models.Hair
+            {
+                Bald = hair.Bald,
+                IsInvisible = hair.Invisible
+            };
 
             var hairColors = hair.HairColor;
             foreach (var hairColor in hairColors)
@@ -166,18 +170,22 @@ namespace RealTimeFaceAnalytics.Core.Services
         }
         private void AddFacialHairToCustomer(Microsoft.ProjectOxford.Face.Contract.FacialHair facialHair)
         {
-            _customer.FacialHair = new Models.FacialHair();
-            _customer.FacialHair.Moustache = facialHair.Moustache;
-            _customer.FacialHair.Beard = facialHair.Beard;
-            _customer.FacialHair.Sideburns = facialHair.Sideburns;
+            _customer.FacialHair = new Models.FacialHair
+            {
+                Moustache = facialHair.Moustache,
+                Beard = facialHair.Beard,
+                Sideburns = facialHair.Sideburns
+            };
         }
         private void AddAdditionalFeaturesToCustomer(FaceAttributes additionalFeatures)
         {
             var glasses = additionalFeatures.Glasses.ToString();
-            _customer.AdditionalFeatures = new AdditionalFeatures();
-            _customer.AdditionalFeatures.Glasses = glasses;
-            _customer.AdditionalFeatures.IsEyeMakeup = additionalFeatures.Makeup.EyeMakeup;
-            _customer.AdditionalFeatures.IsLipMakeup = additionalFeatures.Makeup.LipMakeup;
+            _customer.AdditionalFeatures = new AdditionalFeatures
+            {
+                Glasses = glasses,
+                IsEyeMakeup = additionalFeatures.Makeup.EyeMakeup,
+                IsLipMakeup = additionalFeatures.Makeup.LipMakeup
+            };
 
             var accessories = additionalFeatures.Accessories;
             _customer.AdditionalFeatures.Accessories = new Accessories();
@@ -202,9 +210,9 @@ namespace RealTimeFaceAnalytics.Core.Services
                 }
             }
         }
-        private void AddFaceApiCallCountToSessionServicesDetails(int faceAPICallCount)
+        private void AddFaceApiCallCountToSessionServicesDetails(int faceApiCallCount)
         {
-            _session.SessionServicesDetails.FaceApiCalls = faceAPICallCount;
+            _session.SessionServicesDetails.FaceApiCalls = faceApiCallCount;
         }
         private void AddSessionDurationToSession(TimeSpan sessionDuration)
         {
@@ -213,14 +221,14 @@ namespace RealTimeFaceAnalytics.Core.Services
         }
         private void InitializeSessionVariables(TimeSpan analysisInterval)
         {
-            _session = new Session();
-            _session.SessionServicesDetails = new SessionServicesDetails();
-            _session.SessionServicesDetails.IntervalSet = analysisInterval;
-            _session.SessionDate = DateTime.Now.Date;
-            _session.SessionStartTime = DateTime.Now.TimeOfDay;
+            _session = new Session
+            {
+                SessionServicesDetails = new SessionServicesDetails {IntervalSet = analysisInterval},
+                SessionDate = DateTime.Now.Date,
+                SessionStartTime = DateTime.Now.TimeOfDay
+            };
 
-            _customer = new Customer();
-            _customer.Session = _session;
+            _customer = new Customer {Session = _session};
             _session.Customer = _customer;
 
             _sessionIntervals = new List<SessionInterval>();
@@ -228,8 +236,7 @@ namespace RealTimeFaceAnalytics.Core.Services
         }
         private void InitializeSessionIntervalVariable()
         {
-            _sessionInterval = new SessionInterval();
-            _sessionInterval.CurrentTime = DateTime.Now.TimeOfDay;
+            _sessionInterval = new SessionInterval {CurrentTime = DateTime.Now.TimeOfDay};
         }
     }
 }
