@@ -17,9 +17,12 @@ namespace RealTimeFaceAnalytics.Core.Interfaces
         Face[] DetectFacesWithDefaultAttributes(MemoryStream imageStream);
         Face[] DetectFacesWithDefaultAttributes(string imagePath);
         int GetFaceServiceClientAPICallCount();
+        void ResetFaceServiceLocalData();
         Task<LiveCameraResult> FacesAnalysisFunction(VideoFrame frame);
         string SummarizeFaceAttributes(FaceAttributes faceAttributes);
         void AddAgeToStatistics(double age);
+        void AddGenderToStatistics(string gender);
         double CalculateAverageAge();
+        string CalculateAverageGender();
     }
 }

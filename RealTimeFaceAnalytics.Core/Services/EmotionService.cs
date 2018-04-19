@@ -84,6 +84,11 @@ namespace RealTimeFaceAnalytics.Core.Services
             return GetEmotionScoresStatistics();
         }
 
+        public void ResetEmotionServiceLocalData()
+        {
+            ResetLocalVariables();
+        }
+
         private async Task<LiveCameraResult> SubmitEmotionsAnalysisFunction(VideoFrame frame)
         {
             var result = new LiveCameraResult();
@@ -137,6 +142,18 @@ namespace RealTimeFaceAnalytics.Core.Services
             result.Surprise = _surpriseArray.Average();
 
             return result;
+        }
+        private void ResetLocalVariables()
+        {
+            _emotionAPICallCount = 0;
+            _angerArray = new List<float>();
+            _contemptArray = new List<float>();
+            _disgustArray = new List<float>();
+            _fearArray = new List<float>();
+            _happinessArray = new List<float>();
+            _neutralArray = new List<float>();
+            _sadnessArray = new List<float>();
+            _surpriseArray = new List<float>();
         }
     }
 }

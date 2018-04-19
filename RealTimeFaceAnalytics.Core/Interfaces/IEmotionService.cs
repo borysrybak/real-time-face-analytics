@@ -16,5 +16,6 @@ namespace RealTimeFaceAnalytics.Core.Interfaces
         string SummarizeEmotionScores(EmotionScores emotionScores);
         void AddEmotionScoresToStatistics(EmotionScores emotionScores);
         EmotionScores CalculateEmotionScoresStatistics();
+        void ResetEmotionServiceLocalData();
     }
 }

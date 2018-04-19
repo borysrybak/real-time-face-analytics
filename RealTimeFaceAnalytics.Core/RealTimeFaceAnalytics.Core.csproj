@@ -108,6 +108,7 @@
     <Compile Include="Events\FrameImageProvidedEvent.cs" />
     <Compile Include="Events\ResultImageAvailableEvent.cs" />
     <Compile Include="Interfaces\IComputerVisionService.cs" />
+    <Compile Include="Interfaces\IDataInsertionService.cs" />
     <Compile Include="Interfaces\IEmotionService.cs" />
     <Compile Include="Interfaces\IFaceService.cs" />
     <Compile Include="Interfaces\IOpenCVService.cs" />
@@ -122,6 +123,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="Services\ComputerVisionService.cs" />
+    <Compile Include="Services\DataInsertionService.cs" />
     <Compile Include="Services\EmotionService.cs" />
     <Compile Include="Services\FaceService.cs" />
     <Compile Include="Services\OpenCVService.cs" />

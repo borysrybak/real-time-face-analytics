@@ -6,6 +6,7 @@ using RealTimeFaceAnalytics.Core.Interfaces;
 using RealTimeFaceAnalytics.Core.Models;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows;
 using VideoFrameAnalyzer;
 
@@ -17,18 +18,21 @@ namespace RealTimeFaceAnalytics.Core.Services
         private readonly IVisualizationService _visualizationService;
         private readonly IOpenCVService _openCVService;
         private readonly IFaceService _faceService;
+        private readonly IDataInsertionService _dataInsertionService;
         private readonly FrameGrabber<LiveCameraResult> _frameGrabber;
         private readonly CascadeClassifier _localFaceDetector;
 
         private LiveCameraResult _currentLiveCameraResult;
 
-        public VideoFrameAnalyzerService(IEventAggregator eventAggregator, IVisualizationService visualizationService, IOpenCVService openCVService, IFaceService faceService)
+        public VideoFrameAnalyzerService(IEventAggregator eventAggregator, IVisualizationService visualizationService,
+            IOpenCVService openCVService, IFaceService faceService, IDataInsertionService dataInsertionService)
         {
             _frameGrabber = new FrameGrabber<LiveCameraResult>();
             _eventAggregator = eventAggregator;
             _visualizationService = visualizationService;
             _openCVService = openCVService;
             _faceService = faceService;
+            _dataInsertionService = dataInsertionService;
             _localFaceDetector = _openCVService.DefaultFrontalFaceDetector();
         }
 
@@ -50,9 +54,9 @@ namespace RealTimeFaceAnalytics.Core.Services
             StartProcessingCamera(selectedCamera);
         }
 
-        public void StopProcessing()
+        public async Task StopProcessing()
         {
-            StopProcessingCamera();
+            await StopProcessingCamera();
         }
 
         private List<string> LoadCameraList()
@@ -116,6 +120,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
                         if (_currentLiveCameraResult.Faces.Length > 0)
                         {
+                            _dataInsertionService.InitializeSessionInterval();
                             var faceAttributes = _currentLiveCameraResult.Faces[0].FaceAttributes;
                             _eventAggregator.PublishOnUIThread(new FaceAttributesResultEvent() { FaceAttributesResult = faceAttributes });
                         }
@@ -127,13 +132,16 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             _faceService.InitializeFaceServiceClient();
             var analysisInterval = Properties.Settings.Default.AnalysisInterval;
+            _dataInsertionService.InitializeSession(analysisInterval);
             _frameGrabber.TriggerAnalysisOnInterval(analysisInterval);
             int selectedCameraIndex = GetSelectedCameraIndex(selectedCamera);
             await _frameGrabber.StartProcessingCameraAsync();
         }
-        private async void StopProcessingCamera()
+        private async Task StopProcessingCamera()
         {
             await _frameGrabber.StopProcessingAsync();
+
+            _dataInsertionService.InsertSessionData();
         }
     }
 }

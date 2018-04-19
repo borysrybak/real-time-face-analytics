@@ -3,6 +3,7 @@ using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face.Contract;
 using RealTimeFaceAnalytics.Core.Events;
 using RealTimeFaceAnalytics.Core.Interfaces;
+using RealTimeFaceAnalytics.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -21,22 +22,36 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
         private readonly IVisualizationService _visualizationService;
         private readonly IEmotionService _emotionService;
         private readonly IFaceService _faceService;
+        private readonly IDataInsertionService _dataInsertionService;
         private readonly DispatcherTimer _timer;
 
         private Stopwatch _stopWatch;
 
         public ShellViewModel(IEventAggregator eventAggregator, IVideoFrameAnalyzerService videoFrameAnalyzerService,
-            IVisualizationService visualizationService, IEmotionService emotionService, IFaceService faceService)
+            IVisualizationService visualizationService, IEmotionService emotionService, IFaceService faceService,
+            IDataInsertionService dataInsertionService)
         {
             _eventAggregator = eventAggregator;
             _videoFrameAnalyzerService = videoFrameAnalyzerService;
             _visualizationService = visualizationService;
             _emotionService = emotionService;
             _faceService = faceService;
+            _dataInsertionService = dataInsertionService;
             _videoFrameAnalyzerService.InitializeFrameGrabber();
 
             _timer = new DispatcherTimer(DispatcherPriority.Render);
             SetCurrentTime();
+        }
+
+        private string _databaseStatement;
+        public string DatabaseStatement
+        {
+            get { return _databaseStatement; }
+            set
+            {
+                _databaseStatement = value;
+                NotifyOfPropertyChange(() => DatabaseStatement);
+            }
         }
 
         public List<string> CameraList
@@ -556,7 +571,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private ObservableCollection<Rectangle> _emotionBars = new ObservableCollection<Rectangle>();
+        private ObservableCollection<Rectangle> _emotionBars;
         public ObservableCollection<Rectangle> EmotionBars
         {
             get { return _emotionBars; }
@@ -636,6 +651,11 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
 
         public void StartAnalyze()
         {
+            _faceService.ResetFaceServiceLocalData();
+            _emotionService.ResetEmotionServiceLocalData();
+            EmotionBars = new ObservableCollection<Rectangle>();
+            DatabaseStatement = string.Empty;
+
             _videoFrameAnalyzerService.StartProcessing(_selectedCameraList);
             StartStopwatch();
             CameraListEnable = false;
@@ -647,7 +667,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
 
         public void StopAnalyze()
         {
-            _videoFrameAnalyzerService.StopProcessing();
+            StopProcessing();
             StopStopwatch();
             CameraListEnable = true;
             CanStartAnalyze = true;
@@ -683,29 +703,44 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
 
         public void Handle(FaceAttributesResultEvent message)
         {
+            _dataInsertionService.InitializeSessionInterval();
             var faceAttributes = message.FaceAttributesResult;
             AssignFaceAttributes(faceAttributes);
-
-            var age = faceAttributes.Age;
-            _faceService.AddAgeToStatistics(age);
+            _dataInsertionService.AddAdditionalFeatures(faceAttributes);
 
             var averageAge = _faceService.CalculateAverageAge();
             AssignAverageAge(averageAge);
+            _dataInsertionService.AddAverageAge(averageAge);
+
+            var averageGender = _faceService.CalculateAverageGender();
+            _dataInsertionService.AddAverageGender(averageGender);
 
             var emotionScores = faceAttributes.Emotion;
             GenerateAndPopulateEmotionBar(emotionScores);
             _emotionService.AddEmotionScoresToStatistics(emotionScores);
+            _dataInsertionService.AddEmotions(emotionScores);
 
             var emotionScoresStatistics = _emotionService.CalculateEmotionScoresStatistics();
             AssignEmotionStatistics(emotionScoresStatistics);
+            _dataInsertionService.AddAverageEmotions(emotionScoresStatistics);
 
             var hairColors = faceAttributes.Hair.HairColor;
             GenerateHairColor(hairColors);
 
-            var faceAPICallCount = _faceService.GetFaceServiceClientAPICallCount();
-            AssignFaceAPICallCount(faceAPICallCount);
+            var faceApiCallCount = _faceService.GetFaceServiceClientAPICallCount();
+            AssignFaceApiCallCount(faceApiCallCount);
+            _dataInsertionService.AddFaceApiCallCount(faceApiCallCount);
+
+            _dataInsertionService.AddSessionIntervalData();
+            _dataInsertionService.AddSessionDuration(_stopWatch.Elapsed);
         }
 
+        private async void StopProcessing()
+        {
+            DatabaseStatement = "Adding to database";
+            await _videoFrameAnalyzerService.StopProcessing();
+            DatabaseStatement = "Added";
+        }
         private void SetCurrentTime()
         {
             _timer.Interval = TimeSpan.FromMilliseconds(250);
@@ -721,7 +756,6 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             _stopWatch = Stopwatch.StartNew();
             _timer.Tick += StopwatchHandler;
         }
-
         private void StopwatchHandler(object sender, EventArgs args)
         {
             var stopWatchTimeSpan = _stopWatch.Elapsed;
@@ -732,7 +766,6 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             var currentSessionTime = $"{elapsedMinutes}:{elapsedSeconds}.{elapsedMiliseconds}";
             CurrentSessionTimer = currentSessionTime;
         }
-
         private void StopStopwatch()
         {
             _stopWatch.Stop();
@@ -748,8 +781,15 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
         }
         private void AssignBasicAttributes(FaceAttributes faceAttributes)
         {
-            Age = faceAttributes.Age;
-            Gender = faceAttributes.Gender;
+            var age = faceAttributes.Age;
+            Age = age;
+            _faceService.AddAgeToStatistics(age);
+            _dataInsertionService.AddAge(age);
+
+            var gender = faceAttributes.Gender;
+            Gender = gender;
+            _faceService.AddGenderToStatistics(gender);
+            _dataInsertionService.AddGender(gender);
 
             Roll = faceAttributes.HeadPose.Roll;
             Yaw = faceAttributes.HeadPose.Yaw;
@@ -772,12 +812,18 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
                 if (hairColor.Color == HairColorType.Unknown) { Unknown = hairColor.Confidence; }
                 if (hairColor.Color == HairColorType.White) { White = hairColor.Confidence; }
             }
+
+            var hair = faceAttributes.Hair;
+            _dataInsertionService.AddHair(hair);
         }
         private void AssignFacialHairAttributes(FaceAttributes faceAttributes)
         {
             Moustache = faceAttributes.FacialHair.Moustache;
             Beard = faceAttributes.FacialHair.Beard;
             Sideburns = faceAttributes.FacialHair.Sideburns;
+
+            var facialHair = faceAttributes.FacialHair;
+            _dataInsertionService.AddFacialHair(facialHair);
         }
         private void AssignAdditionalAttributes(FaceAttributes faceAttributes)
         {
@@ -801,7 +847,6 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             {
                 Accessories = "None";
             }
-
         }
         private void AssignEmotionAttributes(FaceAttributes faceAttributes)
         {
@@ -839,9 +884,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             var mixedHairColor = _visualizationService.MixHairColor(hairColors);
             HairColor = new ObservableCollection<Rectangle>(mixedHairColor);
         }
-        private void AssignFaceAPICallCount(int faceAPICallCount)
+        private void AssignFaceApiCallCount(int faceApiCallCount)
         {
-            FaceAPICallCount = faceAPICallCount;
+            FaceAPICallCount = faceApiCallCount; ;
         }
     }
 }

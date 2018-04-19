@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RealTimeFaceAnalytics.Core.Interfaces
 {
@@ -7,6 +8,6 @@ namespace RealTimeFaceAnalytics.Core.Interfaces
         List<string> GetAvailableCameraList();
         void InitializeFrameGrabber();
         void StartProcessing(string selectedCamera);
-        void StopProcessing();
+        Task StopProcessing();
     }
 }

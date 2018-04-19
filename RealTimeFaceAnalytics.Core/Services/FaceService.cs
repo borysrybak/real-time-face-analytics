@@ -18,6 +18,7 @@ namespace RealTimeFaceAnalytics.Core.Services
         private FaceServiceClient _faceServiceClient;
         private int _faceAPICallCount = 0;
         private List<double> _ageArray = new List<double>();
+        private List<string> _genderArray = new List<string>();
 
         public FaceService()
         {
@@ -61,6 +62,11 @@ namespace RealTimeFaceAnalytics.Core.Services
             return _faceAPICallCount;
         }
 
+        public void ResetFaceServiceLocalData()
+        {
+            ResetLocalVariables();
+        }
+
         public async Task<LiveCameraResult> FacesAnalysisFunction(VideoFrame frame)
         {
             return await SubmitFacesAnalysisFunction(frame);
@@ -76,9 +82,19 @@ namespace RealTimeFaceAnalytics.Core.Services
             AddAndCalculateAgeStatistics(age);
         }
 
+        public void AddGenderToStatistics(string gender)
+        {
+            AddAndCalculateGenderStatistics(gender);
+        }
+
         public double CalculateAverageAge()
         {
             return GetAgeStatistics();
+        }
+
+        public string CalculateAverageGender()
+        {
+            return GetGenderStatistics();
         }
 
         private void InitializeFaceAPIClient()
@@ -146,6 +162,10 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             _ageArray.Add(age);
         }
+        private void AddAndCalculateGenderStatistics(string gender)
+        {
+            _genderArray.Add(gender);
+        }
         private double GetAgeStatistics()
         {
             var result = 0.0;
@@ -153,6 +173,22 @@ namespace RealTimeFaceAnalytics.Core.Services
             result = _ageArray.Average();
 
             return result;
+        }
+        private string GetGenderStatistics()
+        {
+            var result = string.Empty;
+
+            result = _genderArray.GroupBy(s => s)
+                         .OrderByDescending(s => s.Count())
+                         .First().Key;
+
+            return result;
+        }
+        private void ResetLocalVariables()
+        {
+            _faceAPICallCount = 0;
+            _ageArray = new List<double>();
+            _genderArray = new List<string>();
         }
     }
 }

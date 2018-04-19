@@ -39,6 +39,7 @@ namespace RealTimeFaceAnalytics.WPF
             _container.Singleton<IOpenCVService, OpenCVService>();
             _container.Singleton<IVideoFrameAnalyzerService, VideoFrameAnalyzerService>();
             _container.Singleton<IVisualizationService, VisualizationService>();
+            _container.Singleton<IDataInsertionService, DataInsertionService>();
 
             _container.PerRequest<ShellViewModel>();
         }
