@@ -7,7 +7,7 @@ namespace RealTimeFaceAnalytics.Core.Models
 {
     public class FaceAnalyticsContext : DbContext
     {
-        public FaceAnalyticsContext() : base("FaceAnalyticsContext")
+        public FaceAnalyticsContext() : base("name=FaceAnalyticsContext")
         {
         }
 
