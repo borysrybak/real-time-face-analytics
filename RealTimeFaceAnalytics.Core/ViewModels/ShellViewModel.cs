@@ -3,7 +3,6 @@ using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face.Contract;
 using RealTimeFaceAnalytics.Core.Events;
 using RealTimeFaceAnalytics.Core.Interfaces;
-using RealTimeFaceAnalytics.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
