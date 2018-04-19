@@ -43,6 +43,17 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             SetCurrentTime();
         }
 
+        private bool _isShellViewWindowsEnabled = true;
+        public bool IsShellViewWindowsEnabled
+        {
+            get { return _isShellViewWindowsEnabled; }
+            set
+            {
+                _isShellViewWindowsEnabled = value;
+                NotifyOfPropertyChange(() => IsShellViewWindowsEnabled);
+            }
+        }
+
         private string _databaseStatement;
         public string DatabaseStatement
         {
@@ -738,8 +749,10 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
         private async void StopProcessing()
         {
             DatabaseStatement = "Adding to database";
+            IsShellViewWindowsEnabled = false;
             await _videoFrameAnalyzerService.StopProcessing();
             DatabaseStatement = "Added";
+            IsShellViewWindowsEnabled = true;
         }
         private void SetCurrentTime()
         {
