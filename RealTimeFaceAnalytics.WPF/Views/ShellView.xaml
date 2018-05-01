@@ -26,7 +26,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <ComboBox IsEnabled="{Binding CameraListEnable}" x:Name="CameraList"  Width="100" Margin="5" />
+                    <ComboBox IsEnabled="{Binding CameraListEnable}" x:Name="CameraList" Width="100" Margin="5" />
                     <Button x:Name="StartAnalyze" Content="Analyze" Width="75" Padding="5,0" Margin="5" />
                     <Button x:Name="StopAnalyze" Content="Stop" Width="75" Padding="5,0" Margin="5" />
                 </StackPanel>
@@ -68,12 +68,14 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Orientation="Horizontal">
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="0"
+                                            Orientation="Horizontal">
                                     <TextBlock Text="Age: " />
                                     <TextBlock x:Name="Age" FontWeight="Bold" Text="0" />
                                 </StackPanel>
 
-                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="1" Orientation="Horizontal">
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="1"
+                                            Orientation="Horizontal">
                                     <TextBlock Text="Gender: " />
                                     <TextBlock x:Name="Gender" FontWeight="Bold" Text="GENDER" />
                                 </StackPanel>
@@ -86,17 +88,20 @@
                                     <RowDefinition Height="*" />
                                 </Grid.RowDefinitions>
 
-                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="0" Orientation="Horizontal">
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="0"
+                                            Orientation="Horizontal">
                                     <TextBlock FontSize="8" Text="Roll: " />
                                     <TextBlock x:Name="Roll" FontWeight="Bold" FontSize="8" Text="0" />
                                 </StackPanel>
 
-                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="1" Orientation="Horizontal">
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="1"
+                                            Orientation="Horizontal">
                                     <TextBlock FontSize="8" Text="Yaw: " />
                                     <TextBlock x:Name="Yaw" FontWeight="Bold" FontSize="8" Text="0" />
                                 </StackPanel>
 
-                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="2" Orientation="Horizontal">
+                                <StackPanel Margin="5,0,0,0" HorizontalAlignment="Left" Grid.Row="2"
+                                            Orientation="Horizontal">
                                     <TextBlock FontSize="8" Text="Pitch: " />
                                     <TextBlock x:Name="Pitch" FontWeight="Bold" FontSize="8" Text="0" />
                                 </StackPanel>
@@ -119,14 +124,15 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="0" >
+                                <StackPanel Grid.Column="0">
                                     <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Bald: " />
                                     <TextBlock x:Name="Bald" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1" >
+                                <StackPanel Grid.Column="1">
                                     <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Invisible: " />
-                                    <TextBlock x:Name="IsInvisibile" HorizontalAlignment="Center" FontWeight="Bold" Text="false" />
+                                    <TextBlock x:Name="IsInvisibile" HorizontalAlignment="Center" FontWeight="Bold"
+                                               Text="false" />
                                 </StackPanel>
                             </Grid>
 
@@ -144,14 +150,16 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <StackPanel Grid.Row="0" >
+                                    <StackPanel Grid.Row="0">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Brown: " />
-                                        <TextBlock x:Name="Brown" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                        <TextBlock x:Name="Brown" HorizontalAlignment="Center" FontWeight="Bold"
+                                                   Text="0" />
                                     </StackPanel>
 
-                                    <StackPanel Grid.Row="1" >
+                                    <StackPanel Grid.Row="1">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Blond: " />
-                                        <TextBlock x:Name="Blond" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                        <TextBlock x:Name="Blond" HorizontalAlignment="Center" FontWeight="Bold"
+                                                   Text="0" />
                                     </StackPanel>
                                 </Grid>
 
@@ -161,14 +169,16 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <StackPanel Grid.Row="0" >
+                                    <StackPanel Grid.Row="0">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Black: " />
-                                        <TextBlock x:Name="Black" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                        <TextBlock x:Name="Black" HorizontalAlignment="Center" FontWeight="Bold"
+                                                   Text="0" />
                                     </StackPanel>
 
-                                    <StackPanel Grid.Row="1" >
+                                    <StackPanel Grid.Row="1">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Other: " />
-                                        <TextBlock x:Name="Other" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                        <TextBlock x:Name="Other" HorizontalAlignment="Center" FontWeight="Bold"
+                                                   Text="0" />
                                     </StackPanel>
                                 </Grid>
 
@@ -178,12 +188,13 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <StackPanel Grid.Row="0" >
+                                    <StackPanel Grid.Row="0">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Gray: " />
-                                        <TextBlock x:Name="Gray" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                        <TextBlock x:Name="Gray" HorizontalAlignment="Center" FontWeight="Bold"
+                                                   Text="0" />
                                     </StackPanel>
 
-                                    <StackPanel Grid.Row="1" >
+                                    <StackPanel Grid.Row="1">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Red: " />
                                         <TextBlock x:Name="Red" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
                                     </StackPanel>
@@ -195,14 +206,16 @@
                                         <RowDefinition Height="*" />
                                     </Grid.RowDefinitions>
 
-                                    <StackPanel Grid.Row="0" >
+                                    <StackPanel Grid.Row="0">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="White: " />
-                                        <TextBlock x:Name="White" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                        <TextBlock x:Name="White" HorizontalAlignment="Center" FontWeight="Bold"
+                                                   Text="0" />
                                     </StackPanel>
 
-                                    <StackPanel Grid.Row="1" >
+                                    <StackPanel Grid.Row="1">
                                         <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Unknown: " />
-                                        <TextBlock x:Name="Unknown" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
+                                        <TextBlock x:Name="Unknown" HorizontalAlignment="Center" FontWeight="Bold"
+                                                   Text="0" />
                                     </StackPanel>
                                 </Grid>
                             </Grid>
@@ -218,17 +231,17 @@
                                 <ColumnDefinition Width="*" />
                             </Grid.ColumnDefinitions>
 
-                            <StackPanel Grid.Column="0" >
+                            <StackPanel Grid.Column="0">
                                 <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Moustache: " />
                                 <TextBlock x:Name="Moustache" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
                             </StackPanel>
 
-                            <StackPanel Grid.Column="1" >
+                            <StackPanel Grid.Column="1">
                                 <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Beard: " />
                                 <TextBlock x:Name="Beard" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
                             </StackPanel>
 
-                            <StackPanel Grid.Column="2" >
+                            <StackPanel Grid.Column="2">
                                 <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Sideburns: " />
                                 <TextBlock x:Name="Sideburns" HorizontalAlignment="Center" FontWeight="Bold" Text="0" />
                             </StackPanel>
@@ -250,19 +263,22 @@
                                     <ColumnDefinition Width="*" />
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="0" >
+                                <StackPanel Grid.Column="0">
                                     <TextBlock FontSize="10" HorizontalAlignment="Center" Text="Glasses: " />
-                                    <TextBlock x:Name="Glasses" HorizontalAlignment="Center" FontWeight="Bold" Text="TEXT" />
+                                    <TextBlock x:Name="Glasses" HorizontalAlignment="Center" FontWeight="Bold"
+                                               Text="TEXT" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1" >
+                                <StackPanel Grid.Column="1">
                                     <TextBlock FontSize="10" HorizontalAlignment="Center" Text="EyeMakeup: " />
-                                    <TextBlock x:Name="IsEyeMakeup" HorizontalAlignment="Center" FontWeight="Bold" Text="false" />
+                                    <TextBlock x:Name="IsEyeMakeup" HorizontalAlignment="Center" FontWeight="Bold"
+                                               Text="false" />
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="2" >
+                                <StackPanel Grid.Column="2">
                                     <TextBlock FontSize="10" HorizontalAlignment="Center" Text="LipMakeup: " />
-                                    <TextBlock x:Name="IsLipMakeup" HorizontalAlignment="Center" FontWeight="Bold" Text="false" />
+                                    <TextBlock x:Name="IsLipMakeup" HorizontalAlignment="Center" FontWeight="Bold"
+                                               Text="false" />
                                 </StackPanel>
                             </Grid>
 
@@ -280,13 +296,14 @@
 
                 <Grid Grid.Column="1" Margin="5">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="83*"/>
-                        <ColumnDefinition Width="12*"/>
+                        <ColumnDefinition Width="83*" />
+                        <ColumnDefinition Width="12*" />
                     </Grid.ColumnDefinitions>
                     <Image VerticalAlignment="Top" Source="{Binding ResultImage}" Grid.ColumnSpan="2" />
-                    <StackPanel x:Name="SettingsPanelIsVisible" Panel.ZIndex="2" Background="LightGray" VerticalAlignment="Top" Margin="5,5,5,0" Grid.ColumnSpan="2"
+                    <StackPanel x:Name="SettingsPanelIsVisible" Panel.ZIndex="2" Background="LightGray"
+                                VerticalAlignment="Top" Margin="5,5,5,0" Grid.ColumnSpan="2"
                                 Grid.Column="0">
-                        <TextBlock Margin="5" FontWeight="Bold" Text="Settings"/>
+                        <TextBlock Margin="5" FontWeight="Bold" Text="Settings" />
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto" />
@@ -304,20 +321,31 @@
                                 <RowDefinition Height="Auto" />
                             </Grid.RowDefinitions>
                             <TextBlock Margin="5" Grid.Row="0" Grid.Column="0" Text="Face API Key:" />
-                            <TextBox   Margin="5" Grid.Row="0" Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.FaceAPIKey, Mode=TwoWay}" />
+                            <TextBox Margin="5" Grid.Row="0" Grid.Column="1"
+                                     Text="{Binding Source={StaticResource Settings}, Path=Default.FaceAPIKey, Mode=TwoWay}" />
                             <TextBlock Margin="5" Grid.Row="1" Grid.Column="0" Text="Face API Host:" />
-                            <TextBox   Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.FaceAPIHost, Mode=TwoWay}" />
+                            <TextBox Margin="5" Grid.Row="1" Grid.Column="1"
+                                     Text="{Binding Source={StaticResource Settings}, Path=Default.FaceAPIHost, Mode=TwoWay}" />
                             <TextBlock Margin="5" Grid.Row="2" Grid.Column="0" Text="Emotion API Key:" />
-                            <TextBox   Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.EmotionAPIKey, Mode=TwoWay}" />
+                            <TextBox Margin="5" Grid.Row="2" Grid.Column="1"
+                                     Text="{Binding Source={StaticResource Settings}, Path=Default.EmotionAPIKey, Mode=TwoWay}" />
                             <TextBlock Margin="5" Grid.Row="3" Grid.Column="0" Text="Emotion API Host:" />
-                            <TextBox   Margin="5" Grid.Row="3" Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.EmotionAPIHost, Mode=TwoWay}" />
+                            <TextBox Margin="5" Grid.Row="3" Grid.Column="1"
+                                     Text="{Binding Source={StaticResource Settings}, Path=Default.EmotionAPIHost, Mode=TwoWay}" />
                             <TextBlock Margin="5" Grid.Row="4" Grid.Column="0" Text="Vision API Key:" />
-                            <TextBox   Margin="5" Grid.Row="4" Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.VisionAPIKey, Mode=TwoWay}" />
+                            <TextBox Margin="5" Grid.Row="4" Grid.Column="1"
+                                     Text="{Binding Source={StaticResource Settings}, Path=Default.VisionAPIKey, Mode=TwoWay}" />
                             <TextBlock Margin="5" Grid.Row="5" Grid.Column="0" Text="Vision API Host:" />
-                            <TextBox   Margin="5" Grid.Row="5" Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.VisionAPIHost, Mode=TwoWay}" />
+                            <TextBox Margin="5" Grid.Row="5" Grid.Column="1"
+                                     Text="{Binding Source={StaticResource Settings}, Path=Default.VisionAPIHost, Mode=TwoWay}" />
                             <TextBlock Margin="5" Grid.Row="7" Grid.Column="0" Text="API Call Interval:" />
-                            <TextBox   Margin="5" Grid.Row="7" Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.AnalysisInterval, Mode=TwoWay}" />
-                            <TextBlock Margin="5" Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" TextWrapping="Wrap"><Run FontWeight="Bold" Text="Caution"/><Run Text=": Each video frame submitted to an API will count towards your transaction limit."/></TextBlock>
+                            <TextBox Margin="5" Grid.Row="7" Grid.Column="1"
+                                     Text="{Binding Source={StaticResource Settings}, Path=Default.AnalysisInterval, Mode=TwoWay}" />
+                            <TextBlock Margin="5" Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" TextWrapping="Wrap">
+                                <Run FontWeight="Bold" Text="Caution" />
+                                <Run
+                                    Text=": Each video frame submitted to an API will count towards your transaction limit." />
+                            </TextBlock>
                         </Grid>
 
                         <Button x:Name="SaveSettings" Margin="5" Content="Save" />
@@ -337,7 +365,7 @@
                     <ItemsControl ItemsSource="{Binding EmotionBars}">
                         <ItemsControl.ItemsPanel>
                             <ItemsPanelTemplate>
-                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal"/>
+                                <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" />
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
                     </ItemsControl>
@@ -402,28 +430,36 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Anger" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Red" />
-                                <TextBlock x:Name="Anger" FontWeight="Bold" FontSize="10" Text="{Binding Anger, StringFormat=N3}" />
+                                <TextBlock x:Name="Anger" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Anger, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Contempt" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Orange" />
-                                <TextBlock x:Name="Contempt" FontWeight="Bold" FontSize="10" Text="{Binding Contempt, StringFormat=N3}" />
+                                <TextBlock x:Name="Contempt" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Contempt, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Disgust" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Indigo" />
-                                <TextBlock x:Name="Disgust" FontWeight="Bold" FontSize="10" Text="{Binding Disgust, StringFormat=N3}" />
+                                <TextBlock x:Name="Disgust" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Disgust, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Fear" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Violet" />
-                                <TextBlock x:Name="Fear" FontWeight="Bold" FontSize="10" Text="{Binding Fear, StringFormat=N3}" />
+                                <TextBlock x:Name="Fear" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Fear, StringFormat=N3}" />
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="1">
@@ -433,28 +469,36 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Happiness" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Green" />
-                                <TextBlock x:Name="Happiness" FontWeight="Bold" FontSize="10" Text="{Binding Happiness, StringFormat=N3}" />
+                                <TextBlock x:Name="Happiness" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Happiness, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Neutral" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Yellow" />
-                                <TextBlock x:Name="Neutral" FontWeight="Bold" FontSize="10" Text="{Binding Neutral, StringFormat=N3}" />
+                                <TextBlock x:Name="Neutral" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Neutral, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Sadness" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Black" />
-                                <TextBlock x:Name="Sadness" FontWeight="Bold" FontSize="10" Text="{Binding Sadness, StringFormat=N3}" />
+                                <TextBlock x:Name="Sadness" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Sadness, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Surprise" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Blue" />
-                                <TextBlock x:Name="Surprise" FontWeight="Bold" FontSize="10" Text="{Binding Surprise, StringFormat=N3}" />
+                                <TextBlock x:Name="Surprise" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding Surprise, StringFormat=N3}" />
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -475,28 +519,36 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Anger" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Red" />
-                                <TextBlock x:Name="AverageAnger" FontWeight="Bold" FontSize="10" Text="{Binding AverageAnger, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageAnger" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageAnger, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Contempt" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Orange" />
-                                <TextBlock x:Name="AverageContempt" FontWeight="Bold" FontSize="10" Text="{Binding AverageContempt, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageContempt" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageContempt, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Disgust" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Indigo" />
-                                <TextBlock x:Name="AverageDisgust" FontWeight="Bold" FontSize="10" Text="{Binding AverageDisgust, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageDisgust" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageDisgust, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Fear" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Violet" />
-                                <TextBlock x:Name="AverageFear" FontWeight="Bold" FontSize="10" Text="{Binding AverageFear, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageFear" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageFear, StringFormat=N3}" />
                             </StackPanel>
                         </Grid>
                         <Grid Grid.Column="1">
@@ -506,28 +558,36 @@
                                 <RowDefinition Height="*" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="0"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Happiness" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Green" />
-                                <TextBlock x:Name="AverageHappiness" FontWeight="Bold" FontSize="10" Text="{Binding AverageHappiness, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageHappiness" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageHappiness, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="1"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Neutral" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Yellow" />
-                                <TextBlock x:Name="AverageNeutral" FontWeight="Bold" FontSize="10" Text="{Binding AverageNeutral, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageNeutral" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageNeutral, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="2"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Sadness" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Black" />
-                                <TextBlock x:Name="AverageSadness" FontWeight="Bold" FontSize="10" Text="{Binding AverageSadness, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageSadness" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageSadness, StringFormat=N3}" />
                             </StackPanel>
 
-                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3" Orientation="Horizontal">
+                            <StackPanel HorizontalAlignment="Left" VerticalAlignment="Center" Grid.Row="3"
+                                        Orientation="Horizontal">
                                 <TextBlock VerticalAlignment="Center" FontSize="10" Text="Surprise" />
                                 <Rectangle Margin="1,0,1,0" Width="5" Height="10" Fill="Blue" />
-                                <TextBlock x:Name="AverageSurprise" FontWeight="Bold" FontSize="10" Text="{Binding AverageSurprise, StringFormat=N3}" />
+                                <TextBlock x:Name="AverageSurprise" FontWeight="Bold" FontSize="10"
+                                           Text="{Binding AverageSurprise, StringFormat=N3}" />
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -535,8 +595,7 @@
 
             </Grid>
 
-            <Grid Grid.Row="2">
-            </Grid>
+            <Grid Grid.Row="2" />
         </Grid>
         <!--#endregion STATISTICS-->
     </Grid>

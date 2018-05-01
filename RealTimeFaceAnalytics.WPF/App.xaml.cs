@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using RealTimeFaceAnalytics.Core.Properties;
 
 namespace RealTimeFaceAnalytics.WPF
 {
@@ -11,7 +12,7 @@ namespace RealTimeFaceAnalytics.WPF
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            Core.Properties.Settings.Default.Save();
+            Settings.Default.Save();
         }
     }
 }

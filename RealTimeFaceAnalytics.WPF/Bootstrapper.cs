@@ -1,10 +1,10 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using Caliburn.Micro;
 using RealTimeFaceAnalytics.Core.Interfaces;
 using RealTimeFaceAnalytics.Core.Services;
 using RealTimeFaceAnalytics.Core.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Windows;
 
 namespace RealTimeFaceAnalytics.WPF
 {
