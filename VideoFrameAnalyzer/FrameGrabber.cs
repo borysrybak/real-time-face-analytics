@@ -132,7 +132,7 @@ namespace VideoFrameAnalyzer
         [Conditional("TRACE_GRABBER")]
         protected void LogMessage(string format, params object[] args)
         {
-            ConcurrentLogger.WriteLine(String.Format(format, args));
+            ConcurrentLogger.WriteLine(string.Format(format, args));
         }
 
         /// <summary> Starts processing frames from a live camera. Stops any current video source

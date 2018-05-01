@@ -21,6 +21,8 @@ namespace RealTimeFaceAnalytics.Core.Services
 {
     public class VisualizationService : IVisualizationService
     {
+        #region Fields
+
         private readonly IEmotionService _emotionService;
         private readonly IFaceService _faceService;
 
@@ -30,6 +32,8 @@ namespace RealTimeFaceAnalytics.Core.Services
         private readonly Typeface _sTypeface = new Typeface(new FontFamily("Segoe UI"), FontStyles.Normal,
             FontWeights.Bold, FontStretches.Normal);
 
+        #endregion Fields
+
         public VisualizationService(IOpenCvService openCvService, IFaceService faceService,
             IEmotionService emotionService)
         {
@@ -37,6 +41,8 @@ namespace RealTimeFaceAnalytics.Core.Services
             _faceService = faceService;
             _emotionService = emotionService;
         }
+
+        #region Methods
 
         public BitmapSource DrawTags(BitmapSource baseImage, Tag[] tags)
         {
@@ -63,6 +69,10 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             return MixHairColorAsRectangles(hairColor);
         }
+
+        #endregion Methods
+
+        #region Private Methods
 
         private static BitmapSource DrawOverlay(BitmapSource baseImage, Action<DrawingContext, double> drawAction)
         {
@@ -324,5 +334,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
+
+        #endregion Private Methods
     }
 }

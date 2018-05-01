@@ -16,6 +16,8 @@ namespace RealTimeFaceAnalytics.Core.Services
 {
     public class EmotionService : IEmotionService
     {
+        #region Fields
+
         private readonly EmotionServiceClient _emotionServiceClient;
         private readonly string _emotionServiceClientApiRoot = Settings.Default.EmotionAPIHost;
         private readonly string _emotionServiceClientSubscriptionKey = Settings.Default.EmotionAPIKey.Trim();
@@ -30,11 +32,15 @@ namespace RealTimeFaceAnalytics.Core.Services
         private List<float> _sadnessArray = new List<float>();
         private List<float> _surpriseArray = new List<float>();
 
+        #endregion Fields
+
         public EmotionService()
         {
             _emotionServiceClient =
                 new EmotionServiceClient(_emotionServiceClientSubscriptionKey, _emotionServiceClientApiRoot);
         }
+
+        #region Methods
 
         public EmotionServiceClient GetEmotionServiceClient()
         {
@@ -90,6 +96,10 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             return await SubmitEmotionsAnalysisFunction(frame);
         }
+
+        #endregion Methods
+
+        #region Private Methods
 
         private async Task<LiveCameraResult> SubmitEmotionsAnalysisFunction(VideoFrame frame)
         {
@@ -164,5 +174,7 @@ namespace RealTimeFaceAnalytics.Core.Services
             _sadnessArray = new List<float>();
             _surpriseArray = new List<float>();
         }
+
+        #endregion Private Methods
     }
 }

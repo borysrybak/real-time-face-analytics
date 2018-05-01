@@ -16,126 +16,13 @@ using RealTimeFaceAnalytics.Core.Properties;
 
 namespace RealTimeFaceAnalytics.Core.ViewModels
 {
+    /// <summary>
+    ///     Main View Model for entire application. Can be loaded with different views as UserControls.
+    /// </summary>
     public class ShellViewModel : Screen, IHandle<FrameImageProvidedEvent>, IHandle<ResultImageAvailableEvent>,
         IHandle<FaceAttributesResultEvent>
     {
-        private readonly IDataInsertionService _dataInsertionService;
-        private readonly IEmotionService _emotionService;
-        private readonly IEventAggregator _eventAggregator;
-        private readonly IFaceService _faceService;
-        private readonly DispatcherTimer _timer;
-        private readonly IVideoFrameAnalyzerService _videoFrameAnalyzerService;
-        private readonly IVisualizationService _visualizationService;
-
-        private string _accessories;
-
-        private double _age;
-
-        private float _anger;
-
-        private double _averageAge;
-
-        private float _averageAnger;
-
-        private float _averageContempt;
-
-        private float _averageDisgust;
-
-        private float _averageFear;
-
-        private float _averageHappiness;
-
-        private float _averageNeutral;
-
-        private float _averageSadness;
-
-        private float _averageSurprise;
-
-        private double _bald;
-
-        private double _beard;
-
-        private double _black;
-
-        private double _blond;
-
-        private double _brown;
-
-        private bool _cameraListEnable;
-
-        private bool _canStartAnalyze;
-
-        private bool _canStopAnalyze;
-
-        private float _contempt;
-
-        private string _currentSessionTimer = "00:00.000";
-
-        private string _currentTime;
-
-        private string _databaseStatement;
-
-        private float _disgust;
-
-        private ObservableCollection<Rectangle> _emotionBars;
-
-        private int _faceApiCallCount;
-
-        private float _fear;
-
-        private BitmapSource _frameImage;
-
-        private string _gender;
-
-        private string _glasses;
-
-        private double _gray;
-
-        private ObservableCollection<Rectangle> _hairColor;
-
-        private float _happiness;
-
-        private bool _isEyeMakeup;
-
-        private bool _isInvisible;
-
-        private bool _isLipMakeup;
-
-        private bool _isShellViewWindowsEnabled = true;
-
-        private double _moustache;
-
-        private float _neutral;
-
-        private double _other;
-
-        private double _pitch;
-
-        private double _red;
-
-        private BitmapSource _resultImage;
-
-        private double _roll;
-
-        private float _sadness;
-
-        private string _selectedCameraList;
-
-        private bool _settingsPanelIsVisible = true;
-
-        private double _sideburns;
-
-        private bool _statisticsIsVisible;
-
-        private Stopwatch _stopWatch;
-
-        private float _surprise;
-
-        private double _unknown;
-
-        private double _white;
-
-        private double _yaw;
+        #region Types
 
         public ShellViewModel(IEventAggregator eventAggregator, IVideoFrameAnalyzerService videoFrameAnalyzerService,
             IVisualizationService visualizationService, IEmotionService emotionService, IFaceService faceService,
@@ -152,6 +39,78 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             _timer = new DispatcherTimer(DispatcherPriority.Render);
             SetCurrentTime();
         }
+
+        #endregion Types
+
+        #region Fields
+
+        private readonly IDataInsertionService _dataInsertionService;
+        private readonly IEmotionService _emotionService;
+        private readonly IEventAggregator _eventAggregator;
+        private readonly IFaceService _faceService;
+        private readonly DispatcherTimer _timer;
+        private readonly IVideoFrameAnalyzerService _videoFrameAnalyzerService;
+        private readonly IVisualizationService _visualizationService;
+
+        private string _accessories;
+        private double _age;
+        private float _anger;
+        private double _averageAge;
+        private float _averageAnger;
+        private float _averageContempt;
+        private float _averageDisgust;
+        private float _averageFear;
+        private float _averageHappiness;
+        private float _averageNeutral;
+        private float _averageSadness;
+        private float _averageSurprise;
+        private double _bald;
+        private double _beard;
+        private double _black;
+        private double _blond;
+        private double _brown;
+        private bool _cameraListEnable;
+        private bool _canStartAnalyze;
+        private bool _canStopAnalyze;
+        private float _contempt;
+        private string _currentSessionTimer = "00:00.000";
+        private string _currentTime;
+        private string _databaseStatement;
+        private float _disgust;
+        private ObservableCollection<Rectangle> _emotionBars;
+        private int _faceApiCallCount;
+        private float _fear;
+        private BitmapSource _frameImage;
+        private string _gender;
+        private string _glasses;
+        private double _gray;
+        private ObservableCollection<Rectangle> _hairColor;
+        private float _happiness;
+        private bool _isEyeMakeup;
+        private bool _isInvisible;
+        private bool _isLipMakeup;
+        private bool _isShellViewWindowsEnabled = true;
+        private double _moustache;
+        private float _neutral;
+        private double _other;
+        private double _pitch;
+        private double _red;
+        private BitmapSource _resultImage;
+        private double _roll;
+        private float _sadness;
+        private string _selectedCameraList;
+        private bool _settingsPanelIsVisible = true;
+        private double _sideburns;
+        private bool _statisticsIsVisible;
+        private Stopwatch _stopWatch;
+        private float _surprise;
+        private double _unknown;
+        private double _white;
+        private double _yaw;
+
+        #endregion Fields
+
+        #region Properties
 
         public bool IsShellViewWindowsEnabled
         {
@@ -704,49 +663,11 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        public void Handle(FaceAttributesResultEvent message)
-        {
-            _dataInsertionService.InitializeSessionInterval();
-            var faceAttributes = message.FaceAttributesResult;
-            AssignFaceAttributes(faceAttributes);
-            _dataInsertionService.AddAdditionalFeatures(faceAttributes);
+        #endregion Properties
 
-            var averageAge = _faceService.CalculateAverageAge();
-            AssignAverageAge(averageAge);
-            _dataInsertionService.AddAverageAge(averageAge);
+        #region Methods
 
-            var averageGender = _faceService.CalculateAverageGender();
-            _dataInsertionService.AddAverageGender(averageGender);
-
-            var emotionScores = faceAttributes.Emotion;
-            GenerateAndPopulateEmotionBar(emotionScores);
-            _emotionService.AddEmotionScoresToStatistics(emotionScores);
-            _dataInsertionService.AddEmotions(emotionScores);
-
-            var emotionScoresStatistics = _emotionService.CalculateEmotionScoresStatistics();
-            AssignEmotionStatistics(emotionScoresStatistics);
-            _dataInsertionService.AddAverageEmotions(emotionScoresStatistics);
-
-            var hairColors = faceAttributes.Hair.HairColor;
-            GenerateHairColor(hairColors);
-
-            var faceApiCallCount = _faceService.GetFaceServiceClientApiCallCount();
-            AssignFaceApiCallCount(faceApiCallCount);
-            _dataInsertionService.AddFaceApiCallCount(faceApiCallCount);
-
-            _dataInsertionService.AddSessionIntervalData();
-            _dataInsertionService.AddSessionDuration(_stopWatch.Elapsed);
-        }
-
-        public void Handle(FrameImageProvidedEvent message)
-        {
-            FrameImage = message.FrameImage;
-        }
-
-        public void Handle(ResultImageAvailableEvent message)
-        {
-            ResultImage = message.ResultImage;
-        }
+            #region Override Methods
 
         protected override void OnActivate()
         {
@@ -760,6 +681,13 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             base.OnDeactivate(close);
         }
 
+        #endregion Override Methods
+
+            #region Commands
+
+        /// <summary>
+        /// Starts Video Frame Analyzer Service process.
+        /// </summary>
         public void StartAnalyze()
         {
             _faceService.ResetFaceServiceLocalData();
@@ -776,6 +704,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             if (!StatisticsIsVisible) ShowHideStatistics();
         }
 
+        /// <summary>
+        /// Stops Video Frame Analyzer Service process.
+        /// </summary>
         public void StopAnalyze()
         {
             StopProcessing();
@@ -786,22 +717,26 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             if (!StatisticsIsVisible) ShowHideStatistics();
         }
 
-        public void ShowHideSettings()
-        {
-            SettingsPanelIsVisible = !SettingsPanelIsVisible;
-        }
-
-        public void ShowHideStatistics()
-        {
-            StatisticsIsVisible = !StatisticsIsVisible;
-        }
-
         public void SaveSettings()
         {
             Settings.Default.Save();
             ShowHideSettings();
         }
 
+        #endregion Commands
+        
+            #region Private Methods
+
+        private void ShowHideSettings()
+        {
+            SettingsPanelIsVisible = !SettingsPanelIsVisible;
+        }
+
+        private void ShowHideStatistics()
+        {
+            StatisticsIsVisible = !StatisticsIsVisible;
+        }
+        
         private async void StopProcessing()
         {
             DatabaseStatement = "Adding to database";
@@ -818,26 +753,10 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             _timer.Start();
         }
 
-        private void SetCurrentTimeHandler(object sender, EventArgs args)
-        {
-            CurrentTime = DateTime.Now.ToLongTimeString();
-        }
-
         private void StartStopwatch()
         {
             _stopWatch = Stopwatch.StartNew();
             _timer.Tick += StopwatchHandler;
-        }
-
-        private void StopwatchHandler(object sender, EventArgs args)
-        {
-            var stopWatchTimeSpan = _stopWatch.Elapsed;
-            var elapsedMiliseconds = stopWatchTimeSpan.Milliseconds;
-            var elapsedSeconds = stopWatchTimeSpan.Seconds;
-            var elapsedMinutes = stopWatchTimeSpan.Minutes;
-
-            var currentSessionTime = $"{elapsedMinutes}:{elapsedSeconds}.{elapsedMiliseconds}";
-            CurrentSessionTimer = currentSessionTime;
         }
 
         private void StopStopwatch()
@@ -974,5 +893,73 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
         {
             FaceApiCallCount = faceApiCallCount;
         }
+
+        #endregion Private Methods
+
+        #endregion Methods
+
+        #region Handlers
+
+        public void Handle(FaceAttributesResultEvent message)
+        {
+            _dataInsertionService.InitializeSessionInterval();
+            var faceAttributes = message.FaceAttributesResult;
+            AssignFaceAttributes(faceAttributes);
+            _dataInsertionService.AddAdditionalFeatures(faceAttributes);
+
+            var averageAge = _faceService.CalculateAverageAge();
+            AssignAverageAge(averageAge);
+            _dataInsertionService.AddAverageAge(averageAge);
+
+            var averageGender = _faceService.CalculateAverageGender();
+            _dataInsertionService.AddAverageGender(averageGender);
+
+            var emotionScores = faceAttributes.Emotion;
+            GenerateAndPopulateEmotionBar(emotionScores);
+            _emotionService.AddEmotionScoresToStatistics(emotionScores);
+            _dataInsertionService.AddEmotions(emotionScores);
+
+            var emotionScoresStatistics = _emotionService.CalculateEmotionScoresStatistics();
+            AssignEmotionStatistics(emotionScoresStatistics);
+            _dataInsertionService.AddAverageEmotions(emotionScoresStatistics);
+
+            var hairColors = faceAttributes.Hair.HairColor;
+            GenerateHairColor(hairColors);
+
+            var faceApiCallCount = _faceService.GetFaceServiceClientApiCallCount();
+            AssignFaceApiCallCount(faceApiCallCount);
+            _dataInsertionService.AddFaceApiCallCount(faceApiCallCount);
+
+            _dataInsertionService.AddSessionIntervalData();
+            _dataInsertionService.AddSessionDuration(_stopWatch.Elapsed);
+        }
+
+        public void Handle(FrameImageProvidedEvent message)
+        {
+            FrameImage = message.FrameImage;
+        }
+
+        public void Handle(ResultImageAvailableEvent message)
+        {
+            ResultImage = message.ResultImage;
+        }
+
+        private void SetCurrentTimeHandler(object sender, EventArgs args)
+        {
+            CurrentTime = DateTime.Now.ToLongTimeString();
+        }
+
+        private void StopwatchHandler(object sender, EventArgs args)
+        {
+            var stopWatchTimeSpan = _stopWatch.Elapsed;
+            var elapsedMiliseconds = stopWatchTimeSpan.Milliseconds;
+            var elapsedSeconds = stopWatchTimeSpan.Seconds;
+            var elapsedMinutes = stopWatchTimeSpan.Minutes;
+
+            var currentSessionTime = $"{elapsedMinutes}:{elapsedSeconds}.{elapsedMiliseconds}";
+            CurrentSessionTimer = currentSessionTime;
+        }
+
+        #endregion Handlers
     }
 }

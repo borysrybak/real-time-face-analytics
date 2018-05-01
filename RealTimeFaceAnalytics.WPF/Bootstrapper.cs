@@ -8,6 +8,9 @@ using RealTimeFaceAnalytics.Core.ViewModels;
 
 namespace RealTimeFaceAnalytics.WPF
 {
+    /// <inheritdoc />
+    /// <summary> Caliburn.Micro Framework configuration class. </summary>
+    /// <seealso cref="T:Caliburn.Micro.BootstrapperBase" />
     public class Bootstrapper : BootstrapperBase
     {
         private SimpleContainer _container;

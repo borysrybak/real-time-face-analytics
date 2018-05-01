@@ -14,17 +14,23 @@ namespace RealTimeFaceAnalytics.Core.Services
 {
     public class ComputerVisionService : IComputerVisionService
     {
+        #region Fields
+
         private readonly VisionServiceClient _visionServiceClient;
         private readonly string _visionServiceClientApiRoot = Settings.Default.VisionAPIHost;
         private readonly string _visionServiceClientSubscriptionKey = Settings.Default.VisionAPIKey.Trim();
 
         private int _visionApiCallCount;
 
+        #endregion Fields
+
         public ComputerVisionService()
         {
             _visionServiceClient =
                 new VisionServiceClient(_visionServiceClientSubscriptionKey, _visionServiceClientApiRoot);
         }
+
+        #region Methods
 
         public VisionServiceClient GetVisionServiceClient()
         {
@@ -51,6 +57,10 @@ namespace RealTimeFaceAnalytics.Core.Services
             return await SubmitVisionAnalysisFunction(frame);
         }
 
+        #endregion Methods
+
+        #region Private Methods
+
         private async Task<LiveCameraResult> SubmitVisionAnalysisFunction(VideoFrame frame)
         {
             var result = new LiveCameraResult();
@@ -74,5 +84,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
+
+        #endregion Private Methods
     }
 }

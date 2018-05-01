@@ -16,6 +16,8 @@ namespace RealTimeFaceAnalytics.Core.Services
 {
     public class VideoFrameAnalyzerService : IVideoFrameAnalyzerService
     {
+        #region Fields
+
         private readonly IDataInsertionService _dataInsertionService;
         private readonly IEventAggregator _eventAggregator;
         private readonly IFaceService _faceService;
@@ -25,6 +27,8 @@ namespace RealTimeFaceAnalytics.Core.Services
         private readonly IVisualizationService _visualizationService;
 
         private LiveCameraResult _currentLiveCameraResult;
+
+        #endregion Fields
 
         public VideoFrameAnalyzerService(IEventAggregator eventAggregator, IVisualizationService visualizationService,
             IOpenCvService openCvService, IFaceService faceService, IDataInsertionService dataInsertionService)
@@ -37,6 +41,8 @@ namespace RealTimeFaceAnalytics.Core.Services
             _dataInsertionService = dataInsertionService;
             _localFaceDetector = _openCvService.DefaultFrontalFaceDetector();
         }
+
+        #region Methods
 
         public List<string> GetAvailableCameraList()
         {
@@ -60,6 +66,10 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             await StopProcessingCamera();
         }
+
+        #endregion Methods
+
+        #region Private Methods
 
         private List<string> LoadCameraList()
         {
@@ -146,5 +156,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             _dataInsertionService.InsertSessionData();
         }
+
+        #endregion Private Methods
     }
 }

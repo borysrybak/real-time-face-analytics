@@ -11,10 +11,16 @@ namespace RealTimeFaceAnalytics.Core.Services
 {
     public class DataInsertionService : IDataInsertionService
     {
+        #region Fields
+
         private Customer _customer;
         private Session _session;
         private SessionInterval _sessionInterval;
         private List<SessionInterval> _sessionIntervals;
+
+        #endregion Fields
+
+        #region Methods
 
         public void InitializeSession(TimeSpan analysisInterval)
         {
@@ -90,6 +96,10 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             AddSessionDurationToSession(sessionDuration);
         }
+
+        #endregion Methods
+
+        #region Private Methods
 
         private async void InsertSessionDataToDatabaseContext()
         {
@@ -254,5 +264,7 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             _sessionInterval = new SessionInterval {CurrentTime = DateTime.Now.TimeOfDay};
         }
+
+        #endregion Private Methods
     }
 }

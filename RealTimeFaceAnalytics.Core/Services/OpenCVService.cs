@@ -17,6 +17,8 @@ namespace RealTimeFaceAnalytics.Core.Services
             _cascadeClassifier = new CascadeClassifier();
         }
 
+        #region Methods
+
         public CascadeClassifier DefaultFrontalFaceDetector()
         {
             return GetLoadedClassifier(HaarCascade.FrontalFaceAlt2);
@@ -26,6 +28,10 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             MatchAndReplaceFaceRectangles(faces, clientRects);
         }
+
+        #endregion Methods
+
+        #region Private Methods
 
         private CascadeClassifier GetLoadedClassifier(HaarCascade haarCascade)
         {
@@ -101,5 +107,7 @@ namespace RealTimeFaceAnalytics.Core.Services
                     new FaceRectangle {Left = r.Left, Top = r.Top, Width = r.Width, Height = r.Height};
             }
         }
+
+        #endregion Private Methods
     }
 }

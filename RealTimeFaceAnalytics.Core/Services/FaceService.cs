@@ -16,11 +16,15 @@ namespace RealTimeFaceAnalytics.Core.Services
 {
     public class FaceService : IFaceService
     {
+        #region Fields
+
         private readonly List<FaceAttributeType> _faceAttributes;
         private List<double> _ageArray = new List<double>();
         private int _faceApiCallCount;
         private FaceServiceClient _faceServiceClient;
         private List<string> _genderArray = new List<string>();
+
+        #endregion Fields
 
         public FaceService()
         {
@@ -28,6 +32,8 @@ namespace RealTimeFaceAnalytics.Core.Services
             _faceAttributes = new List<FaceAttributeType>();
             InitializeAllFaceAttributes(); //InitializeDefaultFaceAttributes();
         }
+
+        #region Methods
 
         public FaceServiceClient GetFaceServiceClient()
         {
@@ -98,6 +104,10 @@ namespace RealTimeFaceAnalytics.Core.Services
         {
             return GetGenderStatistics();
         }
+
+        #endregion Methods
+
+        #region Private Methods
 
         private void InitializeFaceApiClient()
         {
@@ -198,5 +208,7 @@ namespace RealTimeFaceAnalytics.Core.Services
             _ageArray = new List<double>();
             _genderArray = new List<string>();
         }
+
+        #endregion Private Methods
     }
 }
