@@ -1,10 +1,10 @@
-﻿using Microsoft.ProjectOxford.Face.Contract;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Microsoft.ProjectOxford.Face.Contract;
 using OpenCvSharp;
 using RealTimeFaceAnalytics.Core.Enums;
 using RealTimeFaceAnalytics.Core.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace RealTimeFaceAnalytics.Core.Services
 {
@@ -35,6 +35,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
+
         private string GetHaarCascadeDataPath(HaarCascade haarCascade)
         {
             var result = string.Empty;
@@ -81,7 +82,9 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
-        private static void MatchAndReplaceFaceRectangles(IReadOnlyCollection<Face> faces, IReadOnlyCollection<Rect> clientRects)
+
+        private static void MatchAndReplaceFaceRectangles(IReadOnlyCollection<Face> faces,
+            IReadOnlyCollection<Rect> clientRects)
         {
             var sortedResultFaces = faces
                 .OrderBy(f => f.FaceRectangle.Left + 0.5 * f.FaceRectangle.Width)
@@ -94,7 +97,8 @@ namespace RealTimeFaceAnalytics.Core.Services
             for (var i = 0; i < Math.Min(faces.Count, clientRects.Count); i++)
             {
                 var r = sortedClientRects[i];
-                sortedResultFaces[i].FaceRectangle = new FaceRectangle { Left = r.Left, Top = r.Top, Width = r.Width, Height = r.Height };
+                sortedResultFaces[i].FaceRectangle =
+                    new FaceRectangle {Left = r.Left, Top = r.Top, Width = r.Width, Height = r.Height};
             }
         }
     }

@@ -1,7 +1,7 @@
-﻿using Microsoft.ProjectOxford.Common;
+﻿using System.IO;
+using Microsoft.ProjectOxford.Common;
 using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Emotion;
-using System.IO;
 
 namespace RealTimeFaceAnalytics.Core.Interfaces
 {

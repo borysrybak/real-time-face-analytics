@@ -1,6 +1,6 @@
-﻿using Microsoft.ProjectOxford.Vision;
+﻿using System.IO;
+using Microsoft.ProjectOxford.Vision;
 using Microsoft.ProjectOxford.Vision.Contract;
-using System.IO;
 
 namespace RealTimeFaceAnalytics.Core.Interfaces
 {

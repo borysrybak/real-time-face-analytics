@@ -1,27 +1,29 @@
-﻿using Microsoft.ProjectOxford.Vision;
-using Microsoft.ProjectOxford.Vision.Contract;
-using RealTimeFaceAnalytics.Core.Interfaces;
-using RealTimeFaceAnalytics.Core.Models;
-using RealTimeFaceAnalytics.Core.Utils;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ProjectOxford.Vision;
+using Microsoft.ProjectOxford.Vision.Contract;
+using RealTimeFaceAnalytics.Core.Interfaces;
+using RealTimeFaceAnalytics.Core.Models;
+using RealTimeFaceAnalytics.Core.Properties;
+using RealTimeFaceAnalytics.Core.Utils;
 using VideoFrameAnalyzer;
 
 namespace RealTimeFaceAnalytics.Core.Services
 {
     public class ComputerVisionService : IComputerVisionService
     {
-        private readonly string _visionServiceClientSubscriptionKey = Properties.Settings.Default.VisionAPIKey.Trim();
-        private readonly string _visionServiceClientApiRoot = Properties.Settings.Default.VisionAPIHost;
         private readonly VisionServiceClient _visionServiceClient;
+        private readonly string _visionServiceClientApiRoot = Settings.Default.VisionAPIHost;
+        private readonly string _visionServiceClientSubscriptionKey = Settings.Default.VisionAPIKey.Trim();
 
         private int _visionApiCallCount;
 
         public ComputerVisionService()
         {
-            _visionServiceClient = new VisionServiceClient(_visionServiceClientSubscriptionKey, _visionServiceClientApiRoot);
+            _visionServiceClient =
+                new VisionServiceClient(_visionServiceClientSubscriptionKey, _visionServiceClientApiRoot);
         }
 
         public VisionServiceClient GetVisionServiceClient()
@@ -59,7 +61,9 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
-        private async Task<Tag[]> AnalyzeImageBySpecificVisualFeatures(dynamic image, params VisualFeature[] visualFeatures)
+
+        private async Task<Tag[]> AnalyzeImageBySpecificVisualFeatures(dynamic image,
+            params VisualFeature[] visualFeatures)
         {
             var features = visualFeatures.Select(feature => Enum.GetName(typeof(VisualFeature), feature)).ToArray();
 

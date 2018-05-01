@@ -1,9 +1,9 @@
-﻿using Microsoft.ProjectOxford.Face;
-using Microsoft.ProjectOxford.Face.Contract;
-using RealTimeFaceAnalytics.Core.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using Microsoft.ProjectOxford.Face;
+using Microsoft.ProjectOxford.Face.Contract;
+using RealTimeFaceAnalytics.Core.Models;
 using VideoFrameAnalyzer;
 
 namespace RealTimeFaceAnalytics.Core.Interfaces

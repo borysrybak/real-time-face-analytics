@@ -31,13 +31,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+using Microsoft.ProjectOxford.Common.Contract;
+using Microsoft.ProjectOxford.Vision.Contract;
+using Face = Microsoft.ProjectOxford.Face.Contract.Face;
+
 namespace RealTimeFaceAnalytics.Core.Models
 {
     public class LiveCameraResult
     {
-        public Microsoft.ProjectOxford.Face.Contract.Face[] Faces { get; set; }
-        public Microsoft.ProjectOxford.Common.Contract.EmotionScores[] EmotionScores { get; set; }
+        public Face[] Faces { get; set; }
+        public EmotionScores[] EmotionScores { get; set; }
         public string[] CelebrityNames { get; set; } = null;
-        public Microsoft.ProjectOxford.Vision.Contract.Tag[] Tags { get; set; }
+        public Tag[] Tags { get; set; }
     }
 }

@@ -1,17 +1,19 @@
-﻿using Microsoft.ProjectOxford.Common.Contract;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.ProjectOxford.Common.Contract;
 using Microsoft.ProjectOxford.Face.Contract;
 using RealTimeFaceAnalytics.Core.Interfaces;
 using RealTimeFaceAnalytics.Core.Models;
-using System;
-using System.Collections.Generic;
+using FacialHair = Microsoft.ProjectOxford.Face.Contract.FacialHair;
+using Hair = Microsoft.ProjectOxford.Face.Contract.Hair;
 
 namespace RealTimeFaceAnalytics.Core.Services
 {
     public class DataInsertionService : IDataInsertionService
     {
+        private Customer _customer;
         private Session _session;
         private SessionInterval _sessionInterval;
-        private Customer _customer;
         private List<SessionInterval> _sessionIntervals;
 
         public void InitializeSession(TimeSpan analysisInterval)
@@ -64,12 +66,12 @@ namespace RealTimeFaceAnalytics.Core.Services
             AddAverageEmotionsToCustomer(averageEmotions);
         }
 
-        public void AddHair(Microsoft.ProjectOxford.Face.Contract.Hair hair)
+        public void AddHair(Hair hair)
         {
             AddHairToCustomer(hair);
         }
 
-        public void AddFacialHair(Microsoft.ProjectOxford.Face.Contract.FacialHair facialHair)
+        public void AddFacialHair(FacialHair facialHair)
         {
             AddFacialHairToCustomer(facialHair);
         }
@@ -99,26 +101,32 @@ namespace RealTimeFaceAnalytics.Core.Services
                 await databaseContext.SaveChangesAsync();
             }
         }
+
         private void AddSessionIntervalDataToSession()
         {
             _sessionIntervals.Add(_sessionInterval);
         }
+
         private void AddAgeToSessionInterval(double age)
         {
             _sessionInterval.Age = age;
         }
+
         private void AddAverageAgeToCustomer(double averageAge)
         {
             _customer.AverageAge = averageAge;
         }
+
         private void AddGenderToSessionInterval(string gender)
         {
             _sessionInterval.Gender = gender;
         }
+
         private void AddAverageGenderToCustomer(string averageGender)
         {
             _customer.AverageGender = averageGender;
         }
+
         private void AddEmotionsToSessionInterval(EmotionScores emotionScores)
         {
             _sessionInterval.Emotions = new Emotions
@@ -133,6 +141,7 @@ namespace RealTimeFaceAnalytics.Core.Services
                 Surprise = emotionScores.Surprise
             };
         }
+
         private void AddAverageEmotionsToCustomer(EmotionScores averageEmotions)
         {
             _customer.AverageEmotions = new Emotions
@@ -147,7 +156,8 @@ namespace RealTimeFaceAnalytics.Core.Services
                 Surprise = averageEmotions.Surprise
             };
         }
-        private void AddHairToCustomer(Microsoft.ProjectOxford.Face.Contract.Hair hair)
+
+        private void AddHairToCustomer(Hair hair)
         {
             _customer.Hair = new Models.Hair
             {
@@ -158,17 +168,18 @@ namespace RealTimeFaceAnalytics.Core.Services
             var hairColors = hair.HairColor;
             foreach (var hairColor in hairColors)
             {
-                if (hairColor.Color == HairColorType.Black) { _customer.Hair.Black = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Blond) { _customer.Hair.Blond = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Brown) { _customer.Hair.Brown = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Gray) { _customer.Hair.Gray = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Other) { _customer.Hair.Other = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Red) { _customer.Hair.Red = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Unknown) { _customer.Hair.Unknown = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.White) { _customer.Hair.White = hairColor.Confidence; }
+                if (hairColor.Color == HairColorType.Black) _customer.Hair.Black = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Blond) _customer.Hair.Blond = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Brown) _customer.Hair.Brown = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Gray) _customer.Hair.Gray = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Other) _customer.Hair.Other = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Red) _customer.Hair.Red = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Unknown) _customer.Hair.Unknown = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.White) _customer.Hair.White = hairColor.Confidence;
             }
         }
-        private void AddFacialHairToCustomer(Microsoft.ProjectOxford.Face.Contract.FacialHair facialHair)
+
+        private void AddFacialHairToCustomer(FacialHair facialHair)
         {
             _customer.FacialHair = new Models.FacialHair
             {
@@ -177,6 +188,7 @@ namespace RealTimeFaceAnalytics.Core.Services
                 Sideburns = facialHair.Sideburns
             };
         }
+
         private void AddAdditionalFeaturesToCustomer(FaceAttributes additionalFeatures)
         {
             var glasses = additionalFeatures.Glasses.ToString();
@@ -210,15 +222,18 @@ namespace RealTimeFaceAnalytics.Core.Services
                 }
             }
         }
+
         private void AddFaceApiCallCountToSessionServicesDetails(int faceApiCallCount)
         {
             _session.SessionServicesDetails.FaceApiCalls = faceApiCallCount;
         }
+
         private void AddSessionDurationToSession(TimeSpan sessionDuration)
         {
             _session.SessionDuration = sessionDuration;
             _sessionInterval.SessionIntervalTime = sessionDuration;
         }
+
         private void InitializeSessionVariables(TimeSpan analysisInterval)
         {
             _session = new Session
@@ -234,6 +249,7 @@ namespace RealTimeFaceAnalytics.Core.Services
             _sessionIntervals = new List<SessionInterval>();
             _session.SessionIntervals = _sessionIntervals;
         }
+
         private void InitializeSessionIntervalVariable()
         {
             _sessionInterval = new SessionInterval {CurrentTime = DateTime.Now.TimeOfDay};

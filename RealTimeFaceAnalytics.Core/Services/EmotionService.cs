@@ -1,28 +1,29 @@
-﻿using Microsoft.ProjectOxford.Common;
-using Microsoft.ProjectOxford.Common.Contract;
-using Microsoft.ProjectOxford.Emotion;
-using RealTimeFaceAnalytics.Core.Interfaces;
-using RealTimeFaceAnalytics.Core.Models;
-using RealTimeFaceAnalytics.Core.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.ProjectOxford.Common;
+using Microsoft.ProjectOxford.Common.Contract;
+using Microsoft.ProjectOxford.Emotion;
+using RealTimeFaceAnalytics.Core.Interfaces;
+using RealTimeFaceAnalytics.Core.Models;
+using RealTimeFaceAnalytics.Core.Properties;
+using RealTimeFaceAnalytics.Core.Utils;
 using VideoFrameAnalyzer;
 
 namespace RealTimeFaceAnalytics.Core.Services
 {
     public class EmotionService : IEmotionService
     {
-        private readonly string _emotionServiceClientSubscriptionKey = Properties.Settings.Default.EmotionAPIKey.Trim();
-        private readonly string _emotionServiceClientApiRoot = Properties.Settings.Default.EmotionAPIHost;
         private readonly EmotionServiceClient _emotionServiceClient;
-
-        private int _emotionApiCallCount;
+        private readonly string _emotionServiceClientApiRoot = Settings.Default.EmotionAPIHost;
+        private readonly string _emotionServiceClientSubscriptionKey = Settings.Default.EmotionAPIKey.Trim();
         private List<float> _angerArray = new List<float>();
         private List<float> _contemptArray = new List<float>();
         private List<float> _disgustArray = new List<float>();
+
+        private int _emotionApiCallCount;
         private List<float> _fearArray = new List<float>();
         private List<float> _happinessArray = new List<float>();
         private List<float> _neutralArray = new List<float>();
@@ -31,7 +32,8 @@ namespace RealTimeFaceAnalytics.Core.Services
 
         public EmotionService()
         {
-            _emotionServiceClient = new EmotionServiceClient(_emotionServiceClientSubscriptionKey, _emotionServiceClientApiRoot);
+            _emotionServiceClient =
+                new EmotionServiceClient(_emotionServiceClientSubscriptionKey, _emotionServiceClientApiRoot);
         }
 
         public EmotionServiceClient GetEmotionServiceClient()
@@ -64,11 +66,6 @@ namespace RealTimeFaceAnalytics.Core.Services
             return _emotionApiCallCount;
         }
 
-        public async Task<LiveCameraResult> EmotionsAnalysisFunction(VideoFrame frame)
-        {
-            return await SubmitEmotionsAnalysisFunction(frame);
-        }
-
         public string SummarizeEmotionScores(EmotionScores emotionScores)
         {
             return SummarizeEmotion(emotionScores);
@@ -89,6 +86,11 @@ namespace RealTimeFaceAnalytics.Core.Services
             ResetLocalVariables();
         }
 
+        public async Task<LiveCameraResult> EmotionsAnalysisFunction(VideoFrame frame)
+        {
+            return await SubmitEmotionsAnalysisFunction(frame);
+        }
+
         private async Task<LiveCameraResult> SubmitEmotionsAnalysisFunction(VideoFrame frame)
         {
             var result = new LiveCameraResult();
@@ -100,6 +102,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
+
         private async Task<Emotion[]> RecognizeEmotionsFromImage(dynamic image, Rectangle[] faceRectangles = null)
         {
             var result = await _emotionServiceClient.RecognizeAsync(image, faceRectangles);
@@ -108,15 +111,18 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
+
         private static Tuple<string, float> GetDominantEmotion(EmotionScores emotionScores)
         {
             return emotionScores.ToRankedList().Select(kv => new Tuple<string, float>(kv.Key, kv.Value)).First();
         }
+
         private static string SummarizeEmotion(EmotionScores emotionScores)
         {
             var bestEmotion = GetDominantEmotion(emotionScores);
             return $"{bestEmotion.Item1}: {bestEmotion.Item2:N1}";
         }
+
         private void AddAndCalculateEmotionScoresStatistics(EmotionScores emotionScores)
         {
             _angerArray.Add(emotionScores.Anger);
@@ -128,6 +134,7 @@ namespace RealTimeFaceAnalytics.Core.Services
             _sadnessArray.Add(emotionScores.Sadness);
             _surpriseArray.Add(emotionScores.Surprise);
         }
+
         private EmotionScores GetEmotionScoresStatistics()
         {
             var result = new EmotionScores
@@ -144,6 +151,7 @@ namespace RealTimeFaceAnalytics.Core.Services
 
             return result;
         }
+
         private void ResetLocalVariables()
         {
             _emotionApiCallCount = 0;

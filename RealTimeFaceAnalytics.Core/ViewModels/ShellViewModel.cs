@@ -1,9 +1,4 @@
-﻿using Caliburn.Micro;
-using Microsoft.ProjectOxford.Common.Contract;
-using Microsoft.ProjectOxford.Face.Contract;
-using RealTimeFaceAnalytics.Core.Events;
-using RealTimeFaceAnalytics.Core.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -12,20 +7,135 @@ using System.Text;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Caliburn.Micro;
+using Microsoft.ProjectOxford.Common.Contract;
+using Microsoft.ProjectOxford.Face.Contract;
+using RealTimeFaceAnalytics.Core.Events;
+using RealTimeFaceAnalytics.Core.Interfaces;
+using RealTimeFaceAnalytics.Core.Properties;
 
 namespace RealTimeFaceAnalytics.Core.ViewModels
 {
-    public class ShellViewModel : Screen, IHandle<FrameImageProvidedEvent>, IHandle<ResultImageAvailableEvent>, IHandle<FaceAttributesResultEvent>
+    public class ShellViewModel : Screen, IHandle<FrameImageProvidedEvent>, IHandle<ResultImageAvailableEvent>,
+        IHandle<FaceAttributesResultEvent>
     {
+        private readonly IDataInsertionService _dataInsertionService;
+        private readonly IEmotionService _emotionService;
         private readonly IEventAggregator _eventAggregator;
+        private readonly IFaceService _faceService;
+        private readonly DispatcherTimer _timer;
         private readonly IVideoFrameAnalyzerService _videoFrameAnalyzerService;
         private readonly IVisualizationService _visualizationService;
-        private readonly IEmotionService _emotionService;
-        private readonly IFaceService _faceService;
-        private readonly IDataInsertionService _dataInsertionService;
-        private readonly DispatcherTimer _timer;
+
+        private string _accessories;
+
+        private double _age;
+
+        private float _anger;
+
+        private double _averageAge;
+
+        private float _averageAnger;
+
+        private float _averageContempt;
+
+        private float _averageDisgust;
+
+        private float _averageFear;
+
+        private float _averageHappiness;
+
+        private float _averageNeutral;
+
+        private float _averageSadness;
+
+        private float _averageSurprise;
+
+        private double _bald;
+
+        private double _beard;
+
+        private double _black;
+
+        private double _blond;
+
+        private double _brown;
+
+        private bool _cameraListEnable;
+
+        private bool _canStartAnalyze;
+
+        private bool _canStopAnalyze;
+
+        private float _contempt;
+
+        private string _currentSessionTimer = "00:00.000";
+
+        private string _currentTime;
+
+        private string _databaseStatement;
+
+        private float _disgust;
+
+        private ObservableCollection<Rectangle> _emotionBars;
+
+        private int _faceApiCallCount;
+
+        private float _fear;
+
+        private BitmapSource _frameImage;
+
+        private string _gender;
+
+        private string _glasses;
+
+        private double _gray;
+
+        private ObservableCollection<Rectangle> _hairColor;
+
+        private float _happiness;
+
+        private bool _isEyeMakeup;
+
+        private bool _isInvisible;
+
+        private bool _isLipMakeup;
+
+        private bool _isShellViewWindowsEnabled = true;
+
+        private double _moustache;
+
+        private float _neutral;
+
+        private double _other;
+
+        private double _pitch;
+
+        private double _red;
+
+        private BitmapSource _resultImage;
+
+        private double _roll;
+
+        private float _sadness;
+
+        private string _selectedCameraList;
+
+        private bool _settingsPanelIsVisible = true;
+
+        private double _sideburns;
+
+        private bool _statisticsIsVisible;
 
         private Stopwatch _stopWatch;
+
+        private float _surprise;
+
+        private double _unknown;
+
+        private double _white;
+
+        private double _yaw;
 
         public ShellViewModel(IEventAggregator eventAggregator, IVideoFrameAnalyzerService videoFrameAnalyzerService,
             IVisualizationService visualizationService, IEmotionService emotionService, IFaceService faceService,
@@ -43,10 +153,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             SetCurrentTime();
         }
 
-        private bool _isShellViewWindowsEnabled = true;
         public bool IsShellViewWindowsEnabled
         {
-            get { return _isShellViewWindowsEnabled; }
+            get => _isShellViewWindowsEnabled;
             set
             {
                 _isShellViewWindowsEnabled = value;
@@ -54,10 +163,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private string _databaseStatement;
         public string DatabaseStatement
         {
-            get { return _databaseStatement; }
+            get => _databaseStatement;
             set
             {
                 _databaseStatement = value;
@@ -70,15 +178,14 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             get
             {
                 var availableCameraList = _videoFrameAnalyzerService.GetAvailableCameraList();
-                if (availableCameraList.Count != 0) { CameraListEnable = true; }
+                if (availableCameraList.Count != 0) CameraListEnable = true;
                 return availableCameraList;
             }
         }
 
-        private string _selectedCameraList;
         public string SelectedCameraList
         {
-            get { return _selectedCameraList; }
+            get => _selectedCameraList;
             set
             {
                 _selectedCameraList = value;
@@ -87,10 +194,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _canStartAnalyze;
         public bool CanStartAnalyze
         {
-            get { return _canStartAnalyze; }
+            get => _canStartAnalyze;
             set
             {
                 _canStartAnalyze = value;
@@ -98,10 +204,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _canStopAnalyze;
         public bool CanStopAnalyze
         {
-            get { return _canStopAnalyze; }
+            get => _canStopAnalyze;
             set
             {
                 _canStopAnalyze = value;
@@ -109,10 +214,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _cameraListEnable;
         public bool CameraListEnable
         {
-            get { return _cameraListEnable; }
+            get => _cameraListEnable;
             set
             {
                 _cameraListEnable = value;
@@ -120,10 +224,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private BitmapSource _frameImage;
         public BitmapSource FrameImage
         {
-            get { return _frameImage; }
+            get => _frameImage;
             set
             {
                 _frameImage = value;
@@ -131,10 +234,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private BitmapSource _resultImage;
         public BitmapSource ResultImage
         {
-            get { return _resultImage; }
+            get => _resultImage;
             set
             {
                 _resultImage = value;
@@ -142,10 +244,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _age;
         public double Age
         {
-            get { return _age; }
+            get => _age;
             set
             {
                 _age = value;
@@ -153,10 +254,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private string _gender;
         public string Gender
         {
-            get { return _gender; }
+            get => _gender;
             set
             {
                 _gender = value;
@@ -164,10 +264,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _roll;
         public double Roll
         {
-            get { return _roll; }
+            get => _roll;
             set
             {
                 _roll = value;
@@ -175,10 +274,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _yaw;
         public double Yaw
         {
-            get { return _yaw; }
+            get => _yaw;
             set
             {
                 _yaw = value;
@@ -186,10 +284,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _pitch;
         public double Pitch
         {
-            get { return _pitch; }
+            get => _pitch;
             set
             {
                 _pitch = value;
@@ -197,10 +294,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _bald;
         public double Bald
         {
-            get { return _bald; }
+            get => _bald;
             set
             {
                 _bald = value;
@@ -208,10 +304,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _isInvisible;
         public bool IsInvisible
         {
-            get { return _isInvisible; }
+            get => _isInvisible;
             set
             {
                 _isInvisible = value;
@@ -219,10 +314,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _black;
         public double Black
         {
-            get { return _black; }
+            get => _black;
             set
             {
                 _black = value;
@@ -230,10 +324,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _blond;
         public double Blond
         {
-            get { return _blond; }
+            get => _blond;
             set
             {
                 _blond = value;
@@ -241,10 +334,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _brown;
         public double Brown
         {
-            get { return _brown; }
+            get => _brown;
             set
             {
                 _brown = value;
@@ -252,10 +344,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _gray;
         public double Gray
         {
-            get { return _gray; }
+            get => _gray;
             set
             {
                 _gray = value;
@@ -263,10 +354,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _other;
         public double Other
         {
-            get { return _other; }
+            get => _other;
             set
             {
                 _other = value;
@@ -274,10 +364,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _red;
         public double Red
         {
-            get { return _red; }
+            get => _red;
             set
             {
                 _red = value;
@@ -285,10 +374,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _unknown;
         public double Unknown
         {
-            get { return _unknown; }
+            get => _unknown;
             set
             {
                 _unknown = value;
@@ -296,10 +384,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _white;
         public double White
         {
-            get { return _white; }
+            get => _white;
             set
             {
                 _white = value;
@@ -307,10 +394,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _moustache;
         public double Moustache
         {
-            get { return _moustache; }
+            get => _moustache;
             set
             {
                 _moustache = value;
@@ -318,10 +404,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _beard;
         public double Beard
         {
-            get { return _beard; }
+            get => _beard;
             set
             {
                 _beard = value;
@@ -329,10 +414,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _sideburns;
         public double Sideburns
         {
-            get { return _sideburns; }
+            get => _sideburns;
             set
             {
                 _sideburns = value;
@@ -340,10 +424,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private string _glasses;
         public string Glasses
         {
-            get { return _glasses; }
+            get => _glasses;
             set
             {
                 _glasses = value;
@@ -351,10 +434,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _isEyeMakeup;
         public bool IsEyeMakeup
         {
-            get { return _isEyeMakeup; }
+            get => _isEyeMakeup;
             set
             {
                 _isEyeMakeup = value;
@@ -362,10 +444,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _isLipMakeup;
         public bool IsLipMakeup
         {
-            get { return _isLipMakeup; }
+            get => _isLipMakeup;
             set
             {
                 _isLipMakeup = value;
@@ -373,10 +454,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private string _accessories;
         public string Accessories
         {
-            get { return _accessories; }
+            get => _accessories;
             set
             {
                 _accessories = value;
@@ -384,10 +464,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private double _averageAge;
         public double AverageAge
         {
-            get { return _averageAge; }
+            get => _averageAge;
             set
             {
                 _averageAge = value;
@@ -395,10 +474,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private int _faceApiCallCount;
         public int FaceApiCallCount
         {
-            get { return _faceApiCallCount; }
+            get => _faceApiCallCount;
             set
             {
                 _faceApiCallCount = value;
@@ -406,10 +484,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _anger;
         public float Anger
         {
-            get { return _anger; }
+            get => _anger;
             set
             {
                 _anger = value;
@@ -417,10 +494,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _contempt;
         public float Contempt
         {
-            get { return _contempt; }
+            get => _contempt;
             set
             {
                 _contempt = value;
@@ -428,10 +504,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _disgust;
         public float Disgust
         {
-            get { return _disgust; }
+            get => _disgust;
             set
             {
                 _disgust = value;
@@ -439,10 +514,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _fear;
         public float Fear
         {
-            get { return _fear; }
+            get => _fear;
             set
             {
                 _fear = value;
@@ -450,10 +524,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _happiness;
         public float Happiness
         {
-            get { return _happiness; }
+            get => _happiness;
             set
             {
                 _happiness = value;
@@ -461,10 +534,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _neutral;
         public float Neutral
         {
-            get { return _neutral; }
+            get => _neutral;
             set
             {
                 _neutral = value;
@@ -472,10 +544,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _sadness;
         public float Sadness
         {
-            get { return _sadness; }
+            get => _sadness;
             set
             {
                 _sadness = value;
@@ -483,10 +554,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _surprise;
         public float Surprise
         {
-            get { return _surprise; }
+            get => _surprise;
             set
             {
                 _surprise = value;
@@ -494,10 +564,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageAnger;
         public float AverageAnger
         {
-            get { return _averageAnger; }
+            get => _averageAnger;
             set
             {
                 _averageAnger = value;
@@ -505,10 +574,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageContempt;
         public float AverageContempt
         {
-            get { return _averageContempt; }
+            get => _averageContempt;
             set
             {
                 _averageContempt = value;
@@ -516,10 +584,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageDisgust;
         public float AverageDisgust
         {
-            get { return _averageDisgust; }
+            get => _averageDisgust;
             set
             {
                 _averageDisgust = value;
@@ -527,10 +594,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageFear;
         public float AverageFear
         {
-            get { return _averageFear; }
+            get => _averageFear;
             set
             {
                 _averageFear = value;
@@ -538,10 +604,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageHappiness;
         public float AverageHappiness
         {
-            get { return _averageHappiness; }
+            get => _averageHappiness;
             set
             {
                 _averageHappiness = value;
@@ -549,10 +614,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageNeutral;
         public float AverageNeutral
         {
-            get { return _averageNeutral; }
+            get => _averageNeutral;
             set
             {
                 _averageNeutral = value;
@@ -560,10 +624,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageSadness;
         public float AverageSadness
         {
-            get { return _averageSadness; }
+            get => _averageSadness;
             set
             {
                 _averageSadness = value;
@@ -571,10 +634,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private float _averageSurprise;
         public float AverageSurprise
         {
-            get { return _averageSurprise; }
+            get => _averageSurprise;
             set
             {
                 _averageSurprise = value;
@@ -582,10 +644,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private ObservableCollection<Rectangle> _emotionBars;
         public ObservableCollection<Rectangle> EmotionBars
         {
-            get { return _emotionBars; }
+            get => _emotionBars;
             set
             {
                 _emotionBars = value;
@@ -593,10 +654,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private ObservableCollection<Rectangle> _hairColor;
         public ObservableCollection<Rectangle> HairColor
         {
-            get { return _hairColor; }
+            get => _hairColor;
             set
             {
                 _hairColor = value;
@@ -604,10 +664,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private string _currentTime;
         public string CurrentTime
         {
-            get { return _currentTime; }
+            get => _currentTime;
             set
             {
                 _currentTime = value;
@@ -615,10 +674,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private string _currentSessionTimer = "00:00.000";
         public string CurrentSessionTimer
         {
-            get { return _currentSessionTimer; }
+            get => _currentSessionTimer;
             set
             {
                 _currentSessionTimer = value;
@@ -626,10 +684,9 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _settingsPanelIsVisible = true;
         public bool SettingsPanelIsVisible
         {
-            get { return _settingsPanelIsVisible; }
+            get => _settingsPanelIsVisible;
             set
             {
                 _settingsPanelIsVisible = value;
@@ -637,79 +694,14 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             }
         }
 
-        private bool _statisticsIsVisible;
         public bool StatisticsIsVisible
         {
-            get { return _statisticsIsVisible; }
+            get => _statisticsIsVisible;
             set
             {
                 _statisticsIsVisible = value;
                 NotifyOfPropertyChange(() => StatisticsIsVisible);
             }
-        }
-
-        protected override void OnActivate()
-        {
-            _eventAggregator.Subscribe(this);
-            base.OnActivate();
-        }
-
-        protected override void OnDeactivate(bool close)
-        {
-            _eventAggregator.Unsubscribe(this);
-            base.OnDeactivate(close);
-        }
-
-        public void StartAnalyze()
-        {
-            _faceService.ResetFaceServiceLocalData();
-            _emotionService.ResetEmotionServiceLocalData();
-            EmotionBars = new ObservableCollection<Rectangle>();
-            DatabaseStatement = string.Empty;
-
-            _videoFrameAnalyzerService.StartProcessing(_selectedCameraList);
-            StartStopwatch();
-            CameraListEnable = false;
-            CanStartAnalyze = false;
-            CanStopAnalyze = true;
-            if (SettingsPanelIsVisible) { ShowHideSettings(); }
-            if (!StatisticsIsVisible) { ShowHideStatistics(); }
-        }
-
-        public void StopAnalyze()
-        {
-            StopProcessing();
-            StopStopwatch();
-            CameraListEnable = true;
-            CanStartAnalyze = true;
-            CanStopAnalyze = false;
-            if (!StatisticsIsVisible) { ShowHideStatistics(); }
-        }
-
-        public void ShowHideSettings()
-        {
-            SettingsPanelIsVisible = !SettingsPanelIsVisible;
-        }
-
-        public void ShowHideStatistics()
-        {
-            StatisticsIsVisible = !StatisticsIsVisible;
-        }
-
-        public void SaveSettings()
-        {
-            Properties.Settings.Default.Save();
-            ShowHideSettings();
-        }
-
-        public void Handle(FrameImageProvidedEvent message)
-        {
-            FrameImage = message.FrameImage;
-        }
-
-        public void Handle(ResultImageAvailableEvent message)
-        {
-            ResultImage = message.ResultImage;
         }
 
         public void Handle(FaceAttributesResultEvent message)
@@ -746,6 +738,70 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             _dataInsertionService.AddSessionDuration(_stopWatch.Elapsed);
         }
 
+        public void Handle(FrameImageProvidedEvent message)
+        {
+            FrameImage = message.FrameImage;
+        }
+
+        public void Handle(ResultImageAvailableEvent message)
+        {
+            ResultImage = message.ResultImage;
+        }
+
+        protected override void OnActivate()
+        {
+            _eventAggregator.Subscribe(this);
+            base.OnActivate();
+        }
+
+        protected override void OnDeactivate(bool close)
+        {
+            _eventAggregator.Unsubscribe(this);
+            base.OnDeactivate(close);
+        }
+
+        public void StartAnalyze()
+        {
+            _faceService.ResetFaceServiceLocalData();
+            _emotionService.ResetEmotionServiceLocalData();
+            EmotionBars = new ObservableCollection<Rectangle>();
+            DatabaseStatement = string.Empty;
+
+            _videoFrameAnalyzerService.StartProcessing(_selectedCameraList);
+            StartStopwatch();
+            CameraListEnable = false;
+            CanStartAnalyze = false;
+            CanStopAnalyze = true;
+            if (SettingsPanelIsVisible) ShowHideSettings();
+            if (!StatisticsIsVisible) ShowHideStatistics();
+        }
+
+        public void StopAnalyze()
+        {
+            StopProcessing();
+            StopStopwatch();
+            CameraListEnable = true;
+            CanStartAnalyze = true;
+            CanStopAnalyze = false;
+            if (!StatisticsIsVisible) ShowHideStatistics();
+        }
+
+        public void ShowHideSettings()
+        {
+            SettingsPanelIsVisible = !SettingsPanelIsVisible;
+        }
+
+        public void ShowHideStatistics()
+        {
+            StatisticsIsVisible = !StatisticsIsVisible;
+        }
+
+        public void SaveSettings()
+        {
+            Settings.Default.Save();
+            ShowHideSettings();
+        }
+
         private async void StopProcessing()
         {
             DatabaseStatement = "Adding to database";
@@ -754,21 +810,25 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             DatabaseStatement = "Added";
             IsShellViewWindowsEnabled = true;
         }
+
         private void SetCurrentTime()
         {
             _timer.Interval = TimeSpan.FromMilliseconds(250);
             _timer.Tick += SetCurrentTimeHandler;
             _timer.Start();
         }
+
         private void SetCurrentTimeHandler(object sender, EventArgs args)
         {
             CurrentTime = DateTime.Now.ToLongTimeString();
         }
+
         private void StartStopwatch()
         {
             _stopWatch = Stopwatch.StartNew();
             _timer.Tick += StopwatchHandler;
         }
+
         private void StopwatchHandler(object sender, EventArgs args)
         {
             var stopWatchTimeSpan = _stopWatch.Elapsed;
@@ -779,11 +839,13 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             var currentSessionTime = $"{elapsedMinutes}:{elapsedSeconds}.{elapsedMiliseconds}";
             CurrentSessionTimer = currentSessionTime;
         }
+
         private void StopStopwatch()
         {
             _stopWatch.Stop();
             _timer.Tick -= StopwatchHandler;
         }
+
         private void AssignFaceAttributes(FaceAttributes faceAttributes)
         {
             AssignBasicAttributes(faceAttributes);
@@ -792,6 +854,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             AssignAdditionalAttributes(faceAttributes);
             AssignEmotionAttributes(faceAttributes);
         }
+
         private void AssignBasicAttributes(FaceAttributes faceAttributes)
         {
             var age = faceAttributes.Age;
@@ -808,6 +871,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             Yaw = faceAttributes.HeadPose.Yaw;
             Pitch = faceAttributes.HeadPose.Pitch;
         }
+
         private void AssignHairAttributes(FaceAttributes faceAttributes)
         {
             Bald = faceAttributes.Hair.Bald;
@@ -816,19 +880,20 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             var hairColors = faceAttributes.Hair.HairColor;
             foreach (var hairColor in hairColors)
             {
-                if (hairColor.Color == HairColorType.Black) { Black = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Blond) { Blond = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Brown) { Brown = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Gray) { Gray = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Other) { Other = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Red) { Red = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.Unknown) { Unknown = hairColor.Confidence; }
-                if (hairColor.Color == HairColorType.White) { White = hairColor.Confidence; }
+                if (hairColor.Color == HairColorType.Black) Black = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Blond) Blond = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Brown) Brown = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Gray) Gray = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Other) Other = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Red) Red = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.Unknown) Unknown = hairColor.Confidence;
+                if (hairColor.Color == HairColorType.White) White = hairColor.Confidence;
             }
 
             var hair = faceAttributes.Hair;
             _dataInsertionService.AddHair(hair);
         }
+
         private void AssignFacialHairAttributes(FaceAttributes faceAttributes)
         {
             Moustache = faceAttributes.FacialHair.Moustache;
@@ -838,6 +903,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             var facialHair = faceAttributes.FacialHair;
             _dataInsertionService.AddFacialHair(facialHair);
         }
+
         private void AssignAdditionalAttributes(FaceAttributes faceAttributes)
         {
             Glasses = faceAttributes.Glasses.ToString();
@@ -854,6 +920,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
                     var accessoryConfidence = accessory.Confidence.ToString(CultureInfo.InvariantCulture);
                     accessoryList.Append(accessoryType + ": " + accessoryConfidence + ", ");
                 }
+
                 Accessories = accessoryList.ToString();
             }
             else
@@ -861,6 +928,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
                 Accessories = "None";
             }
         }
+
         private void AssignEmotionAttributes(FaceAttributes faceAttributes)
         {
             Anger = faceAttributes.Emotion.Anger;
@@ -872,11 +940,13 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             Sadness = faceAttributes.Emotion.Sadness;
             Surprise = faceAttributes.Emotion.Surprise;
         }
+
         private void GenerateAndPopulateEmotionBar(EmotionScores emotionScores)
         {
             var bar = _visualizationService.ComposeRectangleBar(emotionScores);
             EmotionBars.Add(bar);
         }
+
         private void AssignEmotionStatistics(EmotionScores emotionScoresStatistics)
         {
             AverageAnger = emotionScoresStatistics.Anger;
@@ -888,15 +958,18 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             AverageSadness = emotionScoresStatistics.Sadness;
             AverageSurprise = emotionScoresStatistics.Surprise;
         }
+
         private void AssignAverageAge(double averageAge)
         {
             AverageAge = averageAge;
         }
+
         private void GenerateHairColor(HairColor[] hairColors)
         {
             var mixedHairColor = _visualizationService.MixHairColor(hairColors);
             HairColor = new ObservableCollection<Rectangle>(mixedHairColor);
         }
+
         private void AssignFaceApiCallCount(int faceApiCallCount)
         {
             FaceApiCallCount = faceApiCallCount;

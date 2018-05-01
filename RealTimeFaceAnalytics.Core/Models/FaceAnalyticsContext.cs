@@ -59,7 +59,7 @@ namespace RealTimeFaceAnalytics.Core.Models
         public Emotions Emotions { get; set; }
     }
 
-    public class Hair 
+    public class Hair
     {
         public int HairId { get; set; }
         public double Bald { get; set; }
@@ -111,8 +111,8 @@ namespace RealTimeFaceAnalytics.Core.Models
 
     public class Session
     {
-        [ForeignKey("Customer")]
-        public int SessionId { get; set; }
+        [ForeignKey("Customer")] public int SessionId { get; set; }
+
         public SessionServicesDetails SessionServicesDetails { get; set; }
         public DateTime? SessionDate { get; set; }
         public TimeSpan? SessionStartTime { get; set; }
