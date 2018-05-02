@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Data.Entity;
 
 namespace RealTimeFaceAnalytics.Core.Models
@@ -19,25 +18,26 @@ namespace RealTimeFaceAnalytics.Core.Models
         public virtual DbSet<AdditionalFeatures> AdditionalFeatures { get; set; }
         public virtual DbSet<Accessories> Accessories { get; set; }
         public virtual DbSet<SessionServicesDetails> CognitiveService { get; set; }
+        //public virtual DbSet<DeviceDetails> DeviceDetails { get; set; }
         public virtual DbSet<Session> Session { get; set; }
     }
 
     public class Customer
     {
         public int CustomerId { get; set; }
+
         public double AverageAge { get; set; }
         public string AverageGender { get; set; }
         public Emotions AverageEmotions { get; set; }
         public Hair Hair { get; set; }
         public FacialHair FacialHair { get; set; }
         public AdditionalFeatures AdditionalFeatures { get; set; }
-
-        public virtual Session Session { get; set; }
     }
 
     public class Emotions
     {
         public int EmotionsId { get; set; }
+
         public double Anger { get; set; }
         public double Happiness { get; set; }
         public double Contempt { get; set; }
@@ -51,17 +51,20 @@ namespace RealTimeFaceAnalytics.Core.Models
     public class SessionInterval
     {
         public int SessionIntervalId { get; set; }
+
         public TimeSpan? CurrentTime { get; set; }
         public TimeSpan? SessionIntervalTime { get; set; }
 
         public double Age { get; set; }
         public string Gender { get; set; }
         public Emotions Emotions { get; set; }
+        public Session Session { get; set; }
     }
 
     public class Hair
     {
         public int HairId { get; set; }
+
         public double Bald { get; set; }
         public double Brown { get; set; }
         public double Black { get; set; }
@@ -77,6 +80,7 @@ namespace RealTimeFaceAnalytics.Core.Models
     public class FacialHair
     {
         public int FacialHairId { get; set; }
+
         public double Moustache { get; set; }
         public double Beard { get; set; }
         public double Sideburns { get; set; }
@@ -94,6 +98,7 @@ namespace RealTimeFaceAnalytics.Core.Models
     public class Accessories
     {
         public int AccessoriesId { get; set; }
+
         public double HeadwearConfidence { get; set; }
         public double GlassesConfidence { get; set; }
         public double MaskConfidence { get; set; }
@@ -109,17 +114,33 @@ namespace RealTimeFaceAnalytics.Core.Models
         public TimeSpan? IntervalSet { get; set; }
     }
 
+    //public class DeviceDetails
+    //{
+    //    public int DeviceDetailsId { get; set; }
+
+    //    public string CpuId { get; set; }
+    //    public string SomeOtherUniqueIds { get; set; }
+    //}
+
+    //public class CustomerServicePointDetails
+    //{
+    //    public int CustomerServicePointDetailsId { get; set; }
+
+    //    public DeviceDetails DeviceDetails { get; set; }
+    //    public string SomeOtherCustomerServicePointDetails { get; set; }
+    //}
+
     public class Session
     {
-        [ForeignKey("Customer")] public int SessionId { get; set; }
+        public int SessionId { get; set; }
 
+        //public CustomerServicePointDetails { get; set; }
         public SessionServicesDetails SessionServicesDetails { get; set; }
         public DateTime? SessionDate { get; set; }
         public TimeSpan? SessionStartTime { get; set; }
         public TimeSpan? SessionEndTime { get; set; }
         public TimeSpan? SessionDuration { get; set; }
-
-        public virtual Customer Customer { get; set; }
-        public virtual List<SessionInterval> SessionIntervals { get; set; }
+        public ICollection<SessionInterval> SessionIntervals { get; set; }
+        public Customer Customer { get; set; }
     }
 }

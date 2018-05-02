@@ -253,7 +253,7 @@ namespace RealTimeFaceAnalytics.Core.Services
                 SessionStartTime = DateTime.Now.TimeOfDay
             };
 
-            _customer = new Customer {Session = _session};
+            _customer = new Customer();
             _session.Customer = _customer;
 
             _sessionIntervals = new List<SessionInterval>();

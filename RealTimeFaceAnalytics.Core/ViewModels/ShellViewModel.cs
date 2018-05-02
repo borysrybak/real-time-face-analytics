@@ -723,20 +723,20 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             ShowHideSettings();
         }
 
-        #endregion Commands
-        
-            #region Private Methods
-
-        private void ShowHideSettings()
+        public void ShowHideSettings()
         {
             SettingsPanelIsVisible = !SettingsPanelIsVisible;
         }
 
-        private void ShowHideStatistics()
+        public void ShowHideStatistics()
         {
             StatisticsIsVisible = !StatisticsIsVisible;
         }
-        
+
+        #endregion Commands
+
+            #region Private Methods
+
         private async void StopProcessing()
         {
             DatabaseStatement = "Adding to database";
