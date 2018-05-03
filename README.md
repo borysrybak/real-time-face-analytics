@@ -81,7 +81,7 @@ If you don't have any of these accounts, you can [create a Microsoft account for
 #### Azure Subscription
 
 Be sure that you have a valid [Azure Subscription](https://azure.microsoft.com/en-us/account/) with funds for such things as Azure SQL Database and/or Cognitive Services.
-If not there are several offers that can help you.
+If not, there are several offers that can help you.
 
 - [Azure Free Account](https://azure.microsoft.com/en-us/offers/ms-azr-0044p/)
 - [Azure for Students](https://azure.microsoft.com/en-us/free/students/)
@@ -90,7 +90,7 @@ If not there are several offers that can help you.
 #### Azure SQL Database
 
 You need a place where you will collect your data from real-time face analysis.
-Adress, database name, user_id and password needed!_
+Adress, database name, user_id and password needed!
 In that case you should create a new resource from your Azure Portal, which will be **Azure SQL Database**.
 
 - [Create an Azure SQL database in the Azure portal](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-get-started-portal)
@@ -151,7 +151,7 @@ Prepare your early created resources, connection strings, credentials, etc.
 
 - [RealTimeFaceAnalytics.Core/Properties/Settings.settings](RealTimeFaceAnalytics.Core/Properties/Settings.settings)
 
-![keysendpoints](assets/keysendpoints_settings.png)
+![keysendpoints](assets/keysendpoints_settings.PNG)
 
 Face API service is enough, just put:
 - **FaceAPIKey**
@@ -159,7 +159,7 @@ Face API service is enough, just put:
 + ***AnalysisInterval**, you can change it for different frame analysis frequency.
 
 2. Configure **Connection String** in application configuration file
-(you will find that particular block between lines 36 and 40) with you **Azure SQL Database** credentials.
+(you will find that particular block between line 36 and 40) with your **Azure SQL Database** credentials.
 
 - [RealTimeFaceAnalytics.WPF/App.config](RealTimeFaceAnalytics.WPF/App.config)
 
@@ -173,7 +173,7 @@ Face API service is enough, just put:
 
 Replace *connectionString* values. For example:
 
-```xml
+```
 connectionString="Server=tcp:myserver.database.windows.net;Database=mydatabase_db;User ID=srvadmin;Password=*************;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
 ```
 
@@ -194,6 +194,242 @@ connectionString="Server=tcp:myserver.database.windows.net;Database=mydatabase_d
 ![apprun](assets/app_run.PNG)
 
 ### Application Highlights
+
+1. WPF Application with MVVM Architecture (Caliburn.Micro).
+Caliburn Micro solved my problem - as a small yet powerful framework, designed for building WPF applications.
+Great support for MVVM patterns enabled me to build a solution quickly.
+
+Most important thing I setup for Caliburn support was [Bootstrapper.cs](RealtimeFaceAnalytics.WPF/Bootstrapper.cs) file - with simple IoC container configuration:
+```csharp
+public class Bootstrapper : BootstrapperBase
+{
+    private SimpleContainer _container;
+    ...
+    protected override void Configure()
+    {
+        ...
+        _container = new SimpleContainer();
+        _container.Singleton<IWindowManager, WindowManager>();
+        ...
+        _container.PerRequest<ShellViewModel>();
+    }
+    ...
+}
+```
+
+2. Starting Video Frame Analyzer Service process.
+
+
+    2.1. Loading cameras:
+
+    - in [ShellViewModel.cs](RealTimeFaceAnalytics.Core/ViewModels/ShellViewModel.cs)
+    ```csharp
+    public List<string> CameraList
+    {
+        get
+        {
+            var availableCameraList = _videoFrameAnalyzerService.GetAvailableCameraList();
+            ...
+        }
+    }
+    ```
+    - in [VideoFrameAnalyzerService.cs](RealTimeFaceAnalytics.Core/Services/VideoFrameAnalyzerService.cs)
+    ```csharp
+    public List<string> GetAvailableCameraList()
+    {
+        return LoadCameraList();
+    }
+    ...
+    private List<string> LoadCameraList()
+    {
+        var numberOfCameras = _frameGrabber.GetNumCameras();
+        ...
+        var cameras = Enumerable.Range(0, numberOfCameras).Select(i => $"Camera {i + 1}");
+        return cameras.ToList();
+    }
+    ```
+    - in [FrameGrabber.cs](VideoFrameAnalyzer/FrameGrabber.cs)
+    ```csharp
+    protected int NumCameras = -1;
+    ...
+    public int GetNumCameras()
+    {
+        if (NumCameras != -1) return NumCameras;
+        ...
+        while (NumCameras < 100)
+        {
+            using (var vc = VideoCapture.FromCamera(NumCameras))
+            {
+                if (vc.IsOpened())
+                    ++NumCameras;
+                else
+                    break;
+            }
+        }
+        return NumCameras;
+    }
+    ```
+
+    2.2. Start processing with selected camera:
+
+    - in [ShellViewModel.cs](RealTimeFaceAnalytics.Core/ViewModels/ShellViewModel.cs)
+    ```csharp
+    public void StartAnalyze()
+    {
+        ...
+        _videoFrameAnalyzerService.StartProcessing(_selectedCameraList);
+        ...
+    }
+    ```
+    - in [VideoFrameAnalyzerService.cs](RealTimeFaceAnalytics.Core/Services/VideoFrameAnalyzerService.cs)
+    ```csharp
+    public void StartProcessing(string selectedCamera)
+    {
+        StartProcessingCamera(selectedCamera);
+    }
+    ...
+    private async void StartProcessingCamera(string selectedCamera)
+    {
+        ...
+        var selectedCameraIndex = GetSelectedCameraIndex(selectedCamera);
+        await _frameGrabber.StartProcessingCameraAsync(selectedCameraIndex);
+    }
+    ```
+    - in [FrameGrabber.cs](VideoFrameAnalyzer/FrameGrabber.cs)
+    ```csharp
+    public async Task StartProcessingCameraAsync(int cameraIndex = 0, double overrideFps = 0)
+    {
+        ...
+        await StopProcessingAsync().ConfigureAwait(false);
+        ...
+        StartProcessing(TimeSpan.FromSeconds(1 / Fps), () => DateTime.Now);
+        ...
+    }
+    ```
+
+    2.3. Handling events with results of frames and data (read more about **EventAggregator** in Caliburn.Micro):
+
+    - creating events
+      - [FaceAttributesResultEvent.cs](RealTimeFaceAnalytics.Core/Events/FaceAttributesResultEvent.cs)
+      - [FrameImageProvidedEvent.cs](RealTimeFaceAnalytics.Core/Events/FrameImageProvidedEvent.cs)
+      - [ResultImageAvailableEvent.cs](RealTimeFaceAnalytics.Core/Events/ResultImageAvailableEvent.cs)
+
+    ```csharp
+    using Microsoft.ProjectOxford.Face.Contract;
+    ...    
+        public class FaceAttributesResultEvent
+        {
+            public FaceAttributes FaceAttributesResult;
+        }
+    ...
+    using System.Windows.Media.Imaging;
+    ...
+        public class FrameImageProvidedEvent
+        {
+            public BitmapSource FrameImage;
+        }
+        ...
+        public class ResultImageAvailableEvent
+        {
+            public BitmapSource ResultImage;
+        }
+    ...
+    ```
+    - setup listeners and publishing events in [VideoFrameAnalyzerService.cs](RealTimeFaceAnalytics.Core/Services/VideoFrameAnalyzerService.cs)
+    ```csharp
+    private void SetUpListenerNewFrame()
+    {
+        _frameGrabber.NewFrameProvided += (s, e) =>
+        {
+            var detectedFacesRectangles = _localFaceDetector.DetectMultiScale(e.Frame.Image);
+            e.Frame.UserData = detectedFacesRectangles;
+            Application.Current.Dispatcher.BeginInvoke((Action) (() =>
+            {
+                var frameImage = e.Frame.Image.ToBitmapSource();
+                var resultImage = _visualizationService.Visualize(e.Frame, _currentLiveCameraResult);
+                _eventAggregator.PublishOnUIThread(new FrameImageProvidedEvent {FrameImage = frameImage});
+                _eventAggregator.PublishOnUIThread(new ResultImageAvailableEvent {ResultImage = resultImage});
+            }));
+        };
+    }
+    ...
+    private void SetUpListenerNewResultFromApiCall()
+    {
+        _frameGrabber.NewResultAvailable += (s, e) =>
+        {
+            Application.Current.Dispatcher.BeginInvoke((Action) (() =>
+            {
+                if (e.TimedOut)
+                ...
+                else if (e.Exception != null)
+                ...
+                else
+                {
+                    _currentLiveCameraResult = e.Analysis;
+                    if (_currentLiveCameraResult.Faces.Length > 0)
+                    {
+                        _dataInsertionService.InitializeSessionInterval();
+                        var faceAttributes = _currentLiveCameraResult.Faces[0].FaceAttributes;
+                        _eventAggregator.PublishOnUIThread(
+                        new FaceAttributesResultEvent {FaceAttributesResult = faceAttributes});
+                    }
+                }
+            }));
+        };
+    }
+    ```
+    - handling events in [ShellViewModel.cs](RealTimeFaceAnalytics.Core/ViewModels/ShellViewModel.cs)   
+    (*Updating Properties in ViewModel and Invoking Services*)
+    ```csharp
+    public class ShellViewModel : Screen, IHandle<FrameImageProvidedEvent>, IHandle<ResultImageAvailableEvent>,
+        IHandle<FaceAttributesResultEvent>
+    {
+        ...
+        public void Handle(FaceAttributesResultEvent message)
+        {
+            _dataInsertionService.InitializeSessionInterval();
+            var faceAttributes = message.FaceAttributesResult;
+            AssignFaceAttributes(faceAttributes);
+            _dataInsertionService.AddAdditionalFeatures(faceAttributes);
+
+            var averageAge = _faceService.CalculateAverageAge();
+            AssignAverageAge(averageAge);
+            _dataInsertionService.AddAverageAge(averageAge);
+
+            var averageGender = _faceService.CalculateAverageGender();
+            _dataInsertionService.AddAverageGender(averageGender);
+
+            var emotionScores = faceAttributes.Emotion;
+            GenerateAndPopulateEmotionBar(emotionScores);
+            _emotionService.AddEmotionScoresToStatistics(emotionScores);
+            _dataInsertionService.AddEmotions(emotionScores);
+
+            var emotionScoresStatistics = _emotionService.CalculateEmotionScoresStatistics();
+            AssignEmotionStatistics(emotionScoresStatistics);
+            _dataInsertionService.AddAverageEmotions(emotionScoresStatistics);
+
+            var hairColors = faceAttributes.Hair.HairColor;
+            GenerateHairColor(hairColors);
+
+            var faceApiCallCount = _faceService.GetFaceServiceClientApiCallCount();
+            AssignFaceApiCallCount(faceApiCallCount);
+            _dataInsertionService.AddFaceApiCallCount(faceApiCallCount);
+
+            _dataInsertionService.AddSessionIntervalData();
+            _dataInsertionService.AddSessionDuration(_stopWatch.Elapsed);
+        }
+        ...
+        public void Handle(FrameImageProvidedEvent message)
+        {
+            FrameImage = message.FrameImage;
+        }
+        ...
+        public void Handle(ResultImageAvailableEvent message)
+        {
+            ResultImage = message.ResultImage;
+        }
+    }
+    ```
 
 ### Database Upload
 
