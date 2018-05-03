@@ -127,22 +127,71 @@ We will use it to get insights about our data from face analysis.
 
 #### PC
 
-<img src="assets/obvious.jpg" alt="It's so obvious!" style="width: 150px !important;"/>
+<img src="assets/obvious.jpg" alt="It's so obvious!" width="150"/>
 
 #### Web Camera
 
 For sure providing frames in the applications is a must,
 and without camera you won't be able to achieve any results.
 
-I used **Creative Live! Cam Chat HD VF0790**. I believe any USB-like camera will be enough.
+I used **Creative Live! Cam Chat HD VF0790**. I believe laptop or any USB-like camera will be enough.
 
-<img src="assets/camera.jpg" alt="Creative Live! Cam Chat HD VF0790" style="width: 200px !important;"/>
+<img src="assets/camera.jpg" alt="Creative Live! Cam Chat HD VF0790" width="150"/>
 
 ## Usage
 
+First things first! Do not skip things that you should do first,
+in that case you need to properly set-up the application.
+Prepare your early created resources, connection strings, credentials, etc.
+
 ### Application Setup
 
+1. Fill in **Cognitive Services keys and endpoints**.
+(Don't worry if you miss that, you will be able to add these keys and endpoint during application runtime). 
+
+- [RealTimeFaceAnalytics.Core/Properties/Settings.settings](RealTimeFaceAnalytics.Core/Properties/Settings.settings)
+
+![keysendpoints](assets/keysendpoints_settings.png)
+
+Face API service is enough, just put:
+- **FaceAPIKey**
+- **FaceAPIHost**
++ ***AnalysisInterval**, you can change it for different frame analysis frequency.
+
+2. Configure **Connection String** in application configuration file
+(you will find that particular block between lines 36 and 40) with you **Azure SQL Database** credentials.
+
+- [RealTimeFaceAnalytics.WPF/App.config](RealTimeFaceAnalytics.WPF/App.config)
+
+```xml
+<connectionStrings>
+    <add name="FaceAnalyticsContext"
+        connectionString="Server=tcp:{database_server_address};Database={database_name};User ID={user};Password={password};Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+        providerName="System.Data.SqlClient" />
+</connectionStrings>
+```
+
+Replace *connectionString* values. For example:
+
+```xml
+connectionString="Server=tcp:myserver.database.windows.net;Database=mydatabase_db;User ID=srvadmin;Password=*************;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+```
+
+3. **Add rule** for Azure SQL Database server in **Firewalls and virtual networks** tab - [read more](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-vnet-service-endpoint-rule-overview).
+
 ### Application Run
+
+1. In Visual Studio set **RealTimeFaceAnalytics.WPF** project as a StartUp Project.
+2. Be sure to add missing references and packages.
+3. Rebuild
+4. Run
+
+
+- *Before you start to analyse frames from your camera stream, you will be able to configure your settings again:*
+![appstart](assets/app_start.png)
+
+- *After clicking Save, choosing Camera and clicking Analyze, you will get a preview camera stream (without local detector) and main stream (with local detector):*
+![apprun](assets/app_run.png)
 
 ### Application Highlights
 
