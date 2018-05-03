@@ -188,10 +188,10 @@ connectionString="Server=tcp:myserver.database.windows.net;Database=mydatabase_d
 
 
 - *Before you start to analyse frames from your camera stream, you will be able to configure your settings again:*
-![appstart](assets/app_start.png)
+![appstart](assets/app_start.PNG)
 
 - *After clicking Save, choosing Camera and clicking Analyze, you will get a preview camera stream (without local detector) and main stream (with local detector):*
-![apprun](assets/app_run.png)
+![apprun](assets/app_run.PNG)
 
 ### Application Highlights
 
