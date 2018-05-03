@@ -127,7 +127,7 @@ We will use it to get insights about our data from face analysis.
 
 #### PC
 
-![obvious](assets/obvious.jpg =150x)
+<img src="assets/obvious.jpg" alt="It's so obvious!" style="width: 150px !important;"/>
 
 #### Web Camera
 
@@ -136,7 +136,7 @@ and without camera you won't be able to achieve any results.
 
 I used **Creative Live! Cam Chat HD VF0790**. I believe any USB-like camera will be enough.
 
-<img src="assets/camera.jpg" alt="Creative Live! Cam Chat HD VF0790" style="width: 200px;"/>
+<img src="assets/camera.jpg" alt="Creative Live! Cam Chat HD VF0790" style="width: 200px !important;"/>
 
 ## Usage
 
