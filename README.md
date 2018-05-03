@@ -127,7 +127,7 @@ We will use it to get insights about our data from face analysis.
 
 #### PC
 
-<img src="assets/obvious.jpg" alt="It's so obvious!" style="width: 150px;"/>
+![obvious](assets/obvious.jpg =150x)
 
 #### Web Camera
 
