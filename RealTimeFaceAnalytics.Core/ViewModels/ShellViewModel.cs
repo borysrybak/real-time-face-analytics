@@ -742,6 +742,7 @@ namespace RealTimeFaceAnalytics.Core.ViewModels
             DatabaseStatement = "Adding to database";
             IsShellViewWindowsEnabled = false;
             await _videoFrameAnalyzerService.StopProcessing();
+            _dataInsertionService.InsertSessionData();
             DatabaseStatement = "Added";
             IsShellViewWindowsEnabled = true;
         }

@@ -153,8 +153,6 @@ namespace RealTimeFaceAnalytics.Core.Services
         private async Task StopProcessingCamera()
         {
             await _frameGrabber.StopProcessingAsync();
-
-            _dataInsertionService.InsertSessionData();
         }
 
         #endregion Private Methods
