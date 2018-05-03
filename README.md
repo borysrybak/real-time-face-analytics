@@ -58,6 +58,7 @@ We achieved:
   - [Database Upload](#database-upload)
   - [Database Check](#database-check)
   - [DirectQuery with Power Bi](#directquery-with-power-bi)
+- [Learnings](#learnings)
 - [Credits](#credits)
 - [References](#references)
 
@@ -431,12 +432,162 @@ public class Bootstrapper : BootstrapperBase
     }
     ```
 
+In general we are using here ready-to-go VideoFrameAnalyzer project for frames grabbing and detecting localy faces.
+If local haar cascade classifier detects a face, algorithm invokes Face API service for analysis.
+In return we are receiving data model of Face Attributes for that particular frame.
+
+Additional features are:
+- displaying current basic face attributes, based on captured frame
+- displaying current face emotion attributes, based on captured frame
+- displaying all occuring face emotion attributes over time (UI time-line), with dominant emotion
+- displaying face emotion attributes statistics, based on occured face emotion attributes.
+
 ### Database Upload
+
+1. With Entity Framework and Code-First approach creating model context was easy.
+
+In [FaceAnalyticsContext.cs](RealtimeFaceAnalytics.Core/Models/FaceAnalyticsContext.cs) file you will find Code-First Entity Framework approach example:
+```csharp
+public class FaceAnalyticsContext : DbContext
+    {
+        public FaceAnalyticsContext() : base("name=FaceAnalyticsContext")
+        {
+        }
+
+        public virtual DbSet<Customer> Customer { get; set; }
+        public virtual DbSet<Emotions> Emotions { get; set; }
+        public virtual DbSet<SessionInterval> SessionInterval { get; set; }
+        public virtual DbSet<Hair> Hair { get; set; }
+        public virtual DbSet<FacialHair> FacialHair { get; set; }
+        public virtual DbSet<AdditionalFeatures> AdditionalFeatures { get; set; }
+        public virtual DbSet<Accessories> Accessories { get; set; }
+        public virtual DbSet<SessionServicesDetails> CognitiveService { get; set; }
+        ...
+        public virtual DbSet<Session> Session { get; set; }
+    }
+
+    public class Customer
+    {
+        ...
+    }
+
+    public class Emotions
+    {
+        ...
+    }
+
+    public class SessionInterval
+    {
+        ...
+    }
+
+    public class Hair
+    {
+        ...
+    }
+
+    public class FacialHair
+    {
+        ...
+    }
+
+    public class AdditionalFeatures
+    {
+        ...
+    }
+
+    public class Accessories
+    {
+        ...
+    }
+
+    public class SessionServicesDetails
+    {
+        ...
+    }
+
+    ...
+
+    public class Session
+    {
+        public int SessionId { get; set; }
+
+        ...
+        public SessionServicesDetails SessionServicesDetails { get; set; }
+        public DateTime? SessionDate { get; set; }
+        public TimeSpan? SessionStartTime { get; set; }
+        public TimeSpan? SessionEndTime { get; set; }
+        public TimeSpan? SessionDuration { get; set; }
+        public ICollection<SessionInterval> SessionIntervals { get; set; }
+        public Customer Customer { get; set; }
+    }
+```
+
+2. As you've seen before in event handling example, we are invoking datainsertionservice every time when frame result and face attributes comes.
+Then after stoping session we are preparing context and uploading it.
+
+In [ShellViewModel.cs](RealTimeFaceAnalytics.Core/ViewModels/ShellViewModel.cs):
+```csharp
+public void StopAnalyze()
+{
+    StopProcessing();
+    ...
+}
+...
+private async void StopProcessing()
+{
+    ...
+    await _videoFrameAnalyzerService.StopProcessing();
+    _dataInsertionService.InsertSessionData();
+    ...
+}
+```
+In [DataInsertionService.cs](RealTimeFaceAnalytics.Core/Services/DataInsertionService.cs):
+```csharp
+public void InsertSessionData()
+{
+    InsertSessionDataToDatabaseContext();
+}
+...
+private async void InsertSessionDataToDatabaseContext()
+{
+    ...
+    using (var databaseContext = new FaceAnalyticsContext())
+    {
+        databaseContext.Session.Add(_session);
+        await databaseContext.SaveChangesAsync();
+    }
+}
+```
 
 ### Database Check
 
+1. Checking if context was uploaded correctly. Using SQL Server Object Explorer in Visual Studio:  
+![database_tables_view](assets/database_tables_view.png)
+
+2. Checking data in tables:
+  - Sessions  
+    ![session](assets/session.png)
+  - SessionIntervals  
+    ![sessionintervals](assets/sessionintervals.png)
+  - Customers  
+    ![customer](assets/customer.png)
+  - Emotions  
+    ![emotion](assets/emotion.png)
+
 ### DirectQuery with Power Bi
 
+1. Great lecture about connecting your data resources with Power BI: [Use DirectQuery in Power BI Desktop](https://docs.microsoft.com/en-us/power-bi/desktop-use-directquery)
+2. Remember to make IP Whitelisting, in case you will receive this message:  
+    ![directquery_fail](assets/directquery_fail.png)
+3. After connecting with database server you will be asked about tables you want to load:  
+    ![directquery_navigator_load](assets/directquery_navigator_load.png)
+4. Loaded tables and hierarchy:  
+    ![powerbi_hierarchy](assets/powerbi_hierarchy.png)
+5. Sample Power Bi chart (Age over Time, in example session):  
+    ![age_over_time](assets/age_over_time.png)
+
+## Learnings
 ## Credits
 ## References
 
