@@ -1,6 +1,6 @@
 ﻿# RealTimeFaceAnalytics
 
-This sample project is an example of **analysing faces in real-time**,
+This sample project is an example of **analyzing faces in real-time**,
 by using **[Azure Cognitive Services](https://docs.microsoft.com/en-us/azure/cognitive-services/welcome)**,
 mostly by **[Face API](https://docs.microsoft.com/en-us/azure/cognitive-services/Face/Overview)** service.
 
@@ -8,13 +8,13 @@ mostly by **[Face API](https://docs.microsoft.com/en-us/azure/cognitive-services
 
 ### Description
 Whole concept was invented up with **[Tauron](https://www.tauron.pl/dla-domu)** for a hackfest to create a **Proof of Concept** for:
-- **Analysing in real-time** customer's face features in customer service points, features such as: gender, age, emotions, etc.
+- **Analyzing in real-time** customer's face features in customer service points, features such as gender, age, emotions, etc.
 - Integrating devices with **cloud storage** and **cognitive services**.
 
 We have made a decision with Tauron related to the target technology, in which the solution will be created (and with which services will be combined):
-- Desktop application written in **[WPF](https://docs.microsoft.com/en-us/dotnet/framework/wpf/getting-started/introduction-to-wpf-in-vs) (C#)** and / or Python.
+- A Desktop application written in **[WPF](https://docs.microsoft.com/en-us/dotnet/framework/wpf/getting-started/introduction-to-wpf-in-vs) (C#)** and/or Python.
 - **Face API, Emotion API, Computer Vision API**, to collect data, such as gender, age, emotions, number of clients, etc.
-- **[Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/)**, for the purpose of storing collected data.
+- **[Azure SQL Database](https://azure.microsoft.com/en-us/services/sql-database/)**, to store collected data.
 - **Azure SQL Database** with **[DirectQuery](https://docs.microsoft.com/en-us/power-bi/desktop-use-directquery)**, to receive direct data for **[Power BI](https://powerbi.microsoft.com/en-us/)** reports.
 
 We achieved:
@@ -64,7 +64,7 @@ We achieved:
 
 ## Prerequisites
 
-To successfully run the application and use it, we need to prepare some important things - if we do not do this, it may turn out that the application will not work properly.
+To successfully run the application and use it, we need to prepare some remarkable things - if we do not do this, it may turn out that the app will not work correctly.
 
 Be sure that you have these... :joy:
 
@@ -74,15 +74,15 @@ First, we need accounts that allow us to use specific services or applications.
 
 #### Microsoft Account
 
-This account is needed in case of using Visual Studio and Azure Portal.
-When you start Visual studio for the first time, you're asked to sign in and provide some basic registration information.
-You should choose a Microsoft account or a work or school account that best represents you.
+We need this account in case of using Visual Studio and Azure Portal.
+When you start Visual Studio for the first time, you're asked to sign in and provide some necessary registration information.
+You should choose a Microsoft account or work or school account that best represents you.
 If you don't have any of these accounts, you can [create a Microsoft account for free](https://account.microsoft.com/account).
 
 #### Azure Subscription
 
-Be sure that you have a valid [Azure Subscription](https://azure.microsoft.com/en-us/account/) with funds for such things as Azure SQL Database and/or Cognitive Services.
-If not, there are several offers that can help you.
+Be sure that you have a valid [Azure Subscription](https://azure.microsoft.com/en-us/account/) with funds for such things as Azure SQL Database and Cognitive Services.
+If not, several offers can help you.
 
 - [Azure Free Account](https://azure.microsoft.com/en-us/offers/ms-azr-0044p/)
 - [Azure for Students](https://azure.microsoft.com/en-us/free/students/)
@@ -91,8 +91,8 @@ If not, there are several offers that can help you.
 #### Azure SQL Database
 
 You need a place where you will collect your data from real-time face analysis.
-Adress, database name, user_id and password needed!
-In that case you should create a new resource from your Azure Portal, which will be **Azure SQL Database**.
+Adress, database name, user_id, and password needed!
+In that case, you should create a new resource from your Azure Portal, which will be **Azure SQL Database**.
 
 - [Create an Azure SQL database in the Azure portal](https://docs.microsoft.com/en-us/azure/sql-database/sql-database-get-started-portal)
 
@@ -100,16 +100,16 @@ In that case you should create a new resource from your Azure Portal, which will
 
 We need Face API key and endpoint address.
 It is possible to use free plan (**F0**) of Cognitive Services,
-however for better experience and results I recommend you to create a new plan (**S0**),
+however for better experience and results, I recommend you to create a new plan (**S0**),
 from higher pricing tier - [pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/face-api/).
 
 - [Create a Cognitive Services APIs account in the Azure portal](https://docs.microsoft.com/en-us/azure/cognitive-services/cognitive-services-apis-create-account)
 
 ### Software
 
-Of course it is possible to run this application without Visual Studio,
-however in that case you should consider downloading proper DLL's, setting-up dependencies and references,
-configurating application settings and more! :skull:
+Of course, it is possible to run this application without Visual Studio,
+however, in that case, you should consider downloading proper DLL's, setting-up dependencies and references,
+configure application settings and more!
 
 #### Tools & Libraries
 
@@ -120,7 +120,7 @@ Visual Studio installed, and proper frameworks to run **Windows Application** (W
 #### Power Bi Desktop
 
 Power BI is a suite of business analytics tools that deliver insights throughout your organization.
-We will use it to get insights about our data from face analysis.
+We will use it to get insights into our data from face analysis.
 
 - [Power BI Desktop](https://powerbi.microsoft.com/en-us/desktop/)
 
@@ -133,7 +133,7 @@ We will use it to get insights about our data from face analysis.
 #### Web Camera
 
 For sure providing frames in the applications is a must,
-and without camera you won't be able to achieve any results.
+and without a camera, you won't be able to achieve any results.
 
 I used **Creative Live! Cam Chat HD VF0790**. I believe laptop or any USB-like camera will be enough.
 
@@ -142,13 +142,13 @@ I used **Creative Live! Cam Chat HD VF0790**. I believe laptop or any USB-like c
 ## Usage
 
 First things first! Do not skip things that you should do first,
-in that case you need to properly set-up the application.
-Prepare your early created resources, connection strings, credentials, etc.
+in that case, you need to correctly set-up the application.
+Prepare your already created resources, connection strings, credentials, etc.
 
 ### Application Setup
 
 1. Fill in **Cognitive Services keys and endpoints**.
-(Don't worry if you miss that, you will be able to add these keys and endpoint during application runtime). 
+(Don't worry if you miss that. You will be able to add these keys and endpoint during application runtime). 
 
 - [RealTimeFaceAnalytics.Core/Properties/Settings.settings](RealTimeFaceAnalytics.Core/Properties/Settings.settings)
 
@@ -188,13 +188,13 @@ connectionString="Server=tcp:myserver.database.windows.net;Database=mydatabase_d
 4. Run
 
 
-- *Before you start to analyse frames from your camera stream, you will be able to configure your settings again:*
+- *Before you start to analyze frames from your camera stream, you will be able to configure your settings again:*
 ![appstart](assets/app_start.PNG)
 
-- *After clicking Save, choosing Camera and clicking Analyze, you will get a preview camera stream (without local detector) and main stream (with local detector):*
+- *After clicking Save, choosing Camera and clicking Analyze, you will get a preview camera stream (without local detector) and camera main stream (with local detector):*
 ![apprun](assets/app_run.PNG)
 
-- *Emotions test (Emotions are measured over time and every tick/interval, you can see them as a average number on the right panel and as a color bars on time line below image stream):*
+- *Emotions test (Emotions are measured over time and every tick/interval, you can see them as an average number on the right panel and as color bars on the timeline below image stream):*
 ![emotions](assets/emotions.gif)
 
 - *Additional accessories test (Different kind of glasses and headwear):*
@@ -224,7 +224,7 @@ public class Bootstrapper : BootstrapperBase
 }
 ```
 
-2. Starting Video Frame Analyzer Service process.
+2. Start of the Video Frame Analyzer Service process.
 
 
     2.1. Loading cameras:
@@ -314,7 +314,7 @@ public class Bootstrapper : BootstrapperBase
     }
     ```
 
-    2.3. Handling events with results of frames and data (read more about **EventAggregator** in Caliburn.Micro):
+    2.3. Handle the events with results of frames and data (read more about **EventAggregator** in Caliburn.Micro):
 
     - creating events
       - [FaceAttributesResultEvent.cs](RealTimeFaceAnalytics.Core/Events/FaceAttributesResultEvent.cs)
@@ -438,15 +438,15 @@ public class Bootstrapper : BootstrapperBase
     }
     ```
 
-In general we are using here ready-to-go VideoFrameAnalyzer project for frames grabbing and detecting localy faces.
+In general, we are using here ready-to-go VideoFrameAnalyzer project for frames grabbing and detecting faces locally.
 If local haar cascade classifier detects a face, algorithm invokes Face API service for analysis.
-In return we are receiving data model of Face Attributes for that particular frame.
+In return, we are receiving data model of Face Attributes for that particular frame.
 
 Additional features are:
 - displaying current basic face attributes, based on captured frame
 - displaying current face emotion attributes, based on captured frame
-- displaying all occuring face emotion attributes over time (UI time-line), with dominant emotion
-- displaying face emotion attributes statistics, based on occured face emotion attributes.
+- displaying all occurring face emotion attributes over time (UI timeline), with dominant emotion
+- displaying face emotion attributes statistics, based on face emotion attributes.
 
 ### Database Upload
 
@@ -529,8 +529,8 @@ public class FaceAnalyticsContext : DbContext
     }
 ```
 
-2. As you've seen before in event handling example, we are invoking datainsertionservice every time when frame result and face attributes comes.
-Then after stoping session we are preparing context and uploading it.
+2. As you've seen before in event handling example, we are invoking **DataInsertionService** methods whenever frame result and face attributes come.
+Then after stopping a session, we are preparing context and uploading it.
 
 In [ShellViewModel.cs](RealTimeFaceAnalytics.Core/ViewModels/ShellViewModel.cs):
 ```csharp
@@ -568,7 +568,7 @@ private async void InsertSessionDataToDatabaseContext()
 
 ### Database Check
 
-1. Checking if context was uploaded correctly. Using SQL Server Object Explorer in Visual Studio:  
+1. Checking if the context was uploaded correctly. Using SQL Server Object Explorer in Visual Studio:  
 ![database_tables_view](assets/database_tables_view.png)
 
 2. Checking data in tables:
@@ -583,7 +583,7 @@ private async void InsertSessionDataToDatabaseContext()
 
 ### DirectQuery with Power Bi
 
-1. Great lecture about connecting your data resources with Power BI: [Use DirectQuery in Power BI Desktop](https://docs.microsoft.com/en-us/power-bi/desktop-use-directquery)
+1. Great lecture about connecting data resources with Power BI: [Use DirectQuery in Power BI Desktop](https://docs.microsoft.com/en-us/power-bi/desktop-use-directquery)
 2. Remember to make IP Whitelisting, in case you will receive this message:  
     ![directquery_fail](assets/directquery_fail.png)
 3. After connecting with database server you will be asked about tables you want to load:  
