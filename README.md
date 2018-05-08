@@ -60,7 +60,7 @@ We achieved:
   - [DirectQuery with Power Bi](#directquery-with-power-bi)
 - [Learnings](#learnings)
 - [Credits](#credits)
-- [References](#references)
+- [Helpful Materials](#helpful-materials)
 
 ## Prerequisites
 
@@ -193,6 +193,12 @@ connectionString="Server=tcp:myserver.database.windows.net;Database=mydatabase_d
 
 - *After clicking Save, choosing Camera and clicking Analyze, you will get a preview camera stream (without local detector) and main stream (with local detector):*
 ![apprun](assets/app_run.PNG)
+
+- *Emotions test (Emotions are measured over time and every tick/interval, you can see them as a average number on the right panel and as a color bars on time line below image stream):*
+![emotions](assets/emotions.gif)
+
+- *Additional accessories test (Different kind of glasses and headwear):*
+![accessories](assets/accessories.gif)
 
 ### Application Highlights
 
@@ -588,6 +594,27 @@ private async void InsertSessionDataToDatabaseContext()
     ![age_over_time](assets/age_over_time.png)
 
 ## Learnings
+
+
+
 ## Credits
-## References
+
+
+
+## Helpful Materials
+
+1. Other Projects  
+- [Video Frame Analysis Sample](https://github.com/Microsoft/Cognitive-Samples-VideoFrameAnalysis)
+- [Intelligent Kiosk](https://github.com/Microsoft/Cognitive-Samples-IntelligentKiosk)
+- [Technical Case Study - BlueDynamic](https://github.com/pospanet/TechCaseStudy_BlueDynamic)
+- [Signal Faces](https://github.com/msimecek/Signal-Faces) ([blogpost](https://codez.deedx.cz/projects/signal-faces/))
+- [Windows IoT Core Cognitive Services Sample](https://github.com/Microsoft/Windows-iotcore-samples/tree/develop/Samples/CognitiveServicesExample)
+
+2. Websites
+- [How to Analyze Videos in Real-time](https://docs.microsoft.com/en-us/azure/cognitive-services/face/face-api-how-to-topics/howtoanalyzevideo_face)
+- [Face API Documentation](https://westus.dev.cognitive.microsoft.com/docs/services/563879b61984550e40cbbe8d/operations/563879b61984550f30395236)
+- [Cognitive Services Pricing](https://azure.microsoft.com/en-us/pricing/details/cognitive-services/)
+- [Visualizing and interacting with your Azure Machine Learning Studio experiments](https://powerbi.microsoft.com/en-us/blog/visualizing-and-interacting-with-your-azure-machine-learning-studio-experiments/)
+
+
 
