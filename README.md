@@ -7,7 +7,7 @@ mostly by **[Face API](https://docs.microsoft.com/en-us/azure/cognitive-services
 ## Overview
 
 ### Description
-Whole concept was invented up with **[Tauron](https://www.tauron.pl/dla-domu)** for a hackfest to create a **Proof of Concept** for:
+The whole concept was invented up with **[Tauron](https://www.tauron.pl/dla-domu)** for a hackfest to create a **Proof of Concept** for:
 - **Analyzing in real-time** customer's face features in customer service points, features such as gender, age, emotions, etc.
 - Integrating devices with **cloud storage** and **cognitive services**.
 
