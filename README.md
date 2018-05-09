@@ -49,8 +49,7 @@ We achieved:
     - [Tools & Libraries](#tools-libraries)
     - [Power Bi Desktop](#power-bi-desktop)
   - [Devices](#devices)  
-    - [PC](#pc)
-    - [Web Camera](#web-camera) 
+    - [PC with Web Camera](#pc-with-web-camera) 
 - [Usage](#usage)
   - [Application Setup](#application-setup)
   - [Application Run](#application-run)
@@ -126,11 +125,7 @@ We will use it to get insights into our data from face analysis.
 
 ### Devices
 
-#### PC
-
-<img src="assets/obvious.jpg" alt="It's so obvious!" width="150"/>
-
-#### Web Camera
+#### PC with Web Camera
 
 For sure providing frames in the applications is a must,
 and without a camera, you won't be able to achieve any results.
@@ -615,7 +610,11 @@ Few existing projects include similar scenario - I recommend you to read the one
 
 ## Credits
 
-TBD
+- Łukasz Blyk - Senior Software Development & Integration Specialist, Tauron
+- Łukasz Cempulik - Software Development & Integration Specialist, Tauron
+- Marcin Zylski - Senior Software Development & Integration Specialist, Tauron
+- Borys Rybak - Software Development Engineer, Microsoft
+
 
 ## Helpful Materials
 
