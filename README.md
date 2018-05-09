@@ -65,7 +65,7 @@ We achieved:
 
 To successfully run the application and use it, we need to prepare some remarkable things - if we do not do this, it may turn out that the app will not work correctly.
 
-Be sure that you have these... :joy:
+Be sure that you have these...
 
 ### Accounts
 
