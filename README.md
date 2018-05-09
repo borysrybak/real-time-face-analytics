@@ -595,11 +595,27 @@ private async void InsertSessionDataToDatabaseContext()
 
 ## Learnings
 
+Analyzing faces in real-time is a challenge, not only for a local machine but also for service.
+For quicker analysis, we used local face detector
+from the OpenCVSharp library (haar cascade) - it is a more convenient way to provide
+previously cropped faces from a whole image. 
 
+This solution and approach it is only a fraction of what we can achieve.
+For instance, providing face identifying would be a unique approach
+to recognizing specific customers - not only for binding their current customer's issues
+but also for storing data about their behavior and sentiment during the interview in Customer Service Point.
+
+Automating this solution would also be helpful for Business Intelligence Analytics and Consultants.
+As a consultant increasing conversation quality with a customer
+is a must - imagine that you can get tips and hints during that talks and suited offers
+that are generated especially for that particular customer,
+just after analyzing his sentiment of talk and emotions (Machine Learning).
+
+Few existing projects include similar scenario - I recommend you to read the one about **[Technical Case Study of BlueDynamic](https://github.com/pospanet/TechCaseStudy_BlueDynamic).**
 
 ## Credits
 
-
+TBD
 
 ## Helpful Materials
 
