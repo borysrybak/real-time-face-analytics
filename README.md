@@ -613,6 +613,7 @@ Few existing projects include similar scenario - I recommend you to read the one
 - Łukasz Blyk - Senior Software Development & Integration Specialist, Tauron
 - Łukasz Cempulik - Software Development & Integration Specialist, Tauron
 - Marcin Zylski - Senior Software Development & Integration Specialist, Tauron
+- Tomasz Kozar - Cloud Technology Strategist, Microsoft
 - Borys Rybak - Software Development Engineer, Microsoft
 
 
